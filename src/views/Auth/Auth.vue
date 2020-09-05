@@ -1,22 +1,16 @@
 <template>
-  <div>
-    <v-card style="width:70%; overflow: hidden" class="secondary--bg mx-auto mt-10">
-      <v-row style="max-width:100%; margin auto 0 ">
-        <v-col class="pa-5">
-          <h1 class="white--text">SIGE</h1>
-        </v-col>
-        <v-col class="pa-5 white" style="box-sizing: border-box">
-          <h2>Iniciar Sesión</h2>
-          <br />
-          <v-text-field label="Correo Electrónico" dense outlined></v-text-field>
-          <v-text-field label="Contraseña" dense outlined></v-text-field>
-          <div class="d-flex">
-            <v-btn class="primary--text" text>Regístrate</v-btn>
-            <v-btn class="primary--bg white--text">Iniciar Sesión</v-btn>
-          </div>
-        </v-col>
-      </v-row>
-    </v-card>
+  <div
+    class="page"
+    :style="`
+      background:url(${require('@/assets/images/background.svg')}); 
+      background-size: 100%;
+      background-position: bottom;
+    `"
+  >
+    <div class="page__form">
+      <h1 class="white--text">SIGE</h1>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -24,5 +18,15 @@
 export default {};
 </script>
 
-<style>
+<style lang="scss">
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  &__form {
+    width: 40%;
+  }
+}
 </style>
