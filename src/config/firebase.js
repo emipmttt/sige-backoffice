@@ -1,6 +1,7 @@
 import firebase from "firebase"
 import "firebase/auth"
 import "firebase/analytics"
+import "firebase/storage"
 // Your web app's Firebase configuration
 var firebaseConfig = {
     apiKey: "AIzaSyBBEuIze-GxYtdffbrquo6kLCOl2-JCJI0",
@@ -12,6 +13,7 @@ var firebaseConfig = {
     appId: "1:252571552181:web:448766bda27cd0c4d571fc",
     measurementId: "G-XGMWLSRXSV"
 };
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();

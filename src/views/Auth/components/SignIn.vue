@@ -38,17 +38,18 @@ export default {
         return alert("Completa todos los campos");
       }
 
+      var v = this;
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(() => {
-          this.loading = false;
-          alert("Te has registrado correctamente");
-          this.$router.push("/h/");
+          v.loading = false;
+          alert("Has iniciado sesión correctamente");
+          v.$router.push("/h/");
         })
         .catch(function (error) {
           // Handle Errors here.
-          this.loading = false;
+          v.loading = false;
           var errorMessage = error.message;
           alert(errorMessage);
           // ...

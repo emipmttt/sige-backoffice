@@ -86,6 +86,7 @@ export default {
         this.loading = false;
         return alert("Ambas contraseñas deben coincidir");
       }
+      var v = this;
 
       firebase
         .auth()
@@ -99,18 +100,19 @@ export default {
               uid: user.user.uid,
               email: this.email,
               name: this.name,
+              type: "teacher",
             })
             .then(() => {
-              this.loading = false;
+              v.loading = false;
               alert("Te has registrado correctamente");
-              this.$router.push("/h/");
+              v.$router.push("/h/");
             })
             .catch(() => {
-              this.loading = false;
+              v.loading = false;
             });
         })
         .catch(function (error) {
-          this.loading = false;
+          v.loading = false;
 
           alert(error.message);
         });

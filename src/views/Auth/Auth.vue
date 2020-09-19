@@ -5,6 +5,7 @@
       background:url(${require('@/assets/images/background.svg')}); 
       background-size: 100%;
       background-position: bottom;
+      background-repeat: no-repeat
     `"
   >
     <div class="page__form">
@@ -27,6 +28,12 @@ export default {};
 
   &__form {
     width: 40%;
+  }
+
+  @media (max-width: 600px) {
+    &__form {
+      width: 80%;
+    }
   }
 }
 </style>
