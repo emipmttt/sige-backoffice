@@ -14,7 +14,9 @@
     </form>
     <v-row v-for="(group, index) in groups_course" :key="index">
       <v-col>{{group.title}}</v-col>
-      <v-col v-if="teachers.length">{{find_teacher(group.teacher).user.name}}</v-col>
+      <v-col
+        v-if="teachers.length"
+      >{{find_teacher(group.teacher).user.name}} {{find_teacher(group.teacher).user.lastname1 || ""}}</v-col>
       <v-col>
         <v-btn @click="delete_group(index)">
           <v-icon>delete</v-icon>
@@ -25,6 +27,7 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from "uuid";
 export default {
   props: {
     groups: Array,
@@ -40,7 +43,7 @@ export default {
   computed: {
     teachers_list() {
       return this.teachers.map((teacher) => ({
-        text: teacher.user.name,
+        text: teacher.user.name + " " + (teacher.user.lastname1 || ""),
         value: teacher.id,
       }));
     },
@@ -52,6 +55,7 @@ export default {
     create_group() {
       let groups = this.groups_course;
       groups.push({
+        id: uuidv4(),
         title: this.title,
         teacher: this.teacher,
       });

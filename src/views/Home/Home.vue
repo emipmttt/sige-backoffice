@@ -64,12 +64,23 @@ export default {
           title: "Usuarios",
           permissions: [2],
         },
-        { path: "/h/cursos", icon: "book", title: "Cursos", permissions: [2] },
+        {
+          path: "/h/cursos",
+          icon: "book",
+          title: "Cursos",
+          permissions: [1, 2],
+        },
         {
           path: "/h/pagos",
           icon: "receipt_long",
           title: "Pagos",
           permissions: [2],
+        },
+        {
+          path: "/h/calificaciones",
+          icon: "school",
+          title: "Calificaciones",
+          permissions: [1, 2],
         },
       ],
     };
@@ -81,12 +92,23 @@ export default {
     ...mapMutations(["update_state"]),
     async get_users() {
       const user_query = await firebase.firestore().collection("users").get();
-
       var users = [];
       user_query.forEach((user) => {
         users.push({ id: user.id, ...user.data() });
       });
       this.update_state(["users", users]);
+    },
+    async get_courses() {
+      const course_query = await firebase
+        .firestore()
+        .collection("courses")
+        .get();
+
+      var courses = [];
+      course_query.forEach((course) => {
+        courses.push({ id: course.id, ...course.data() });
+      });
+      this.update_state(["courses", courses]);
     },
     changeDrawerState() {
       this.drawer = !this.drawer;
@@ -97,6 +119,7 @@ export default {
   },
   async created() {
     await this.get_users();
+    await this.get_courses();
   },
 };
 </script>

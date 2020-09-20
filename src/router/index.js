@@ -11,6 +11,7 @@ import Home from "../views/Home/Home.vue"
 import Courses from "../views/Home/components/Courses/Courses.vue"
 import Users from "../views/Home/components/Users/Users.vue"
 import Bill from "../views/Home/components/Bill/Bill.vue"
+import Notes from "../views/Home/components/Notes/Notes.vue"
 
 Vue.use(VueRouter)
 
@@ -31,6 +32,7 @@ const routes = [
       { path: "usuarios", component: Users },
       { path: "cursos", component: Courses },
       { path: "pagos", component: Bill },
+      { path: "calificaciones", component: Notes },
     ]
   }
 ]

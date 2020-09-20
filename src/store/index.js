@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: {},
-    users: []
+    users: [],
+    courses: []
   },
   mutations: {
     update_state(state, data) {

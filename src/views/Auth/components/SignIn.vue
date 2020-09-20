@@ -51,7 +51,7 @@ export default {
             .doc(user.user.uid)
             .get()
             .then((response) => {
-              if (response.data().type == 2) {
+              if (response.data().type == 2 || response.data().type == 1) {
                 v.loading = false;
                 alert("Bienvenido");
                 this.update_state([
