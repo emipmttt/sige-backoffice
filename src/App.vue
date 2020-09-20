@@ -5,8 +5,18 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: "App",
+  methods: {
+    ...mapMutations(["update_state"]),
+  },
+  mounted() {
+    var user = localStorage.getItem("sige_user");
+    if (user) {
+      this.update_state(["user", JSON.parse(user)]);
+    }
+  },
 };
 </script>
 

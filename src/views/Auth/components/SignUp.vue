@@ -97,15 +97,18 @@ export default {
             .collection("users")
             .doc(user.user.uid)
             .set({
-              uid: user.user.uid,
-              email: this.email,
-              name: this.name,
-              type: "teacher",
+              user: {
+                email: this.email,
+                name: this.name,
+              },
+              type: 0,
+              active: false,
+              created_at: Date.now(),
             })
             .then(() => {
               v.loading = false;
               alert("Te has registrado correctamente");
-              v.$router.push("/h/");
+              v.$router.push("/iniciar-sesion");
             })
             .catch(() => {
               v.loading = false;

@@ -10,6 +10,7 @@ import SignUp from '../views/Auth/components/SignUp.vue'
 import Home from "../views/Home/Home.vue"
 import Courses from "../views/Home/components/Courses/Courses.vue"
 import Users from "../views/Home/components/Users/Users.vue"
+import Bill from "../views/Home/components/Bill/Bill.vue"
 
 Vue.use(VueRouter)
 
@@ -27,8 +28,9 @@ const routes = [
     path: '/h',
     component: Home,
     children: [
-      { path: "cursos", component: Courses },
       { path: "usuarios", component: Users },
+      { path: "cursos", component: Courses },
+      { path: "pagos", component: Bill },
     ]
   }
 ]

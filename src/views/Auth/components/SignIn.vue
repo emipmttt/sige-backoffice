@@ -21,6 +21,7 @@
 
 <script>
 import firebase from "@/config/firebase";
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -30,6 +31,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["update_state"]),
     sing_in() {
       if (this.loading) return;
       this.loading = true;
@@ -42,10 +44,35 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then(() => {
-          v.loading = false;
-          alert("Has iniciado sesión correctamente");
-          v.$router.push("/h/");
+        .then((user) => {
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(user.user.uid)
+            .get()
+            .then((response) => {
+              if (response.data().type == 2) {
+                v.loading = false;
+                alert("Bienvenido");
+                this.update_state([
+                  "user",
+                  { id: response.id, ...response.data() },
+                ]);
+                localStorage.setItem(
+                  "sige_user",
+                  JSON.stringify({ id: response.id, ...response.data() })
+                );
+                v.$router.push("/h/");
+              } else {
+                v.loading = false;
+                alert(
+                  "No tienes permisos suficientes para acceder a esta página"
+                );
+              }
+            })
+            .catch((error) => {
+              alert(error.message);
+            });
         })
         .catch(function (error) {
           // Handle Errors here.

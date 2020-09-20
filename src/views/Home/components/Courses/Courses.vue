@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CoursesList />
+    <CoursesList :courses="courses" />
     <CreateCourses />
   </div>
 </template>
@@ -19,10 +19,18 @@ export default {
   },
   methods: {
     async getCourses() {
-      await firebase.firestore().collection("courses").limit(10).get();
+      const courses_query = await firebase
+        .firestore()
+        .collection("courses")
+        .get();
+      const courses = [];
+      courses_query.forEach((el) => {
+        courses.push({ id: el.id, ...el.data() });
+      });
+      this.courses = courses;
     },
   },
-  mounted() {
+  created() {
     this.getCourses();
   },
 };
