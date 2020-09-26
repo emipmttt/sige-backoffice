@@ -1,7 +1,7 @@
 <template>
   <tr>
     <td>
-      <img :src="course.photo" />
+      <img class="image-item" :src="course.photo" />
     </td>
     <td>{{ course.title }}</td>
     <td>{{ course.date }}</td>
@@ -18,7 +18,10 @@
 
           <v-card-text>
             <v-text-field v-model="course.title" label="Título"></v-text-field>
-            <v-text-field v-model="course.date" label="Fecha"></v-text-field>
+            <v-text-field
+              v-model="course.date"
+              label="Fecha de inicio"
+            ></v-text-field>
             <v-switch v-model="course.public" label="Curso Publico"></v-switch>
             <v-divider></v-divider>
             <GroupsConfig
@@ -28,12 +31,23 @@
             />
             <v-divider></v-divider>
 
-            <BillsConfig @update_bills="update_bills($event)" :bills="course.bills" />
+            <BillsConfig
+              @update_bills="update_bills($event)"
+              :bills="course.bills"
+            />
           </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="update_course();finish()">Actualizar</v-btn>
+            <v-btn
+              color="primary"
+              text
+              @click="
+                update_course();
+                finish();
+              "
+              >Actualizar</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -87,4 +101,8 @@ export default {
 </script>
 
 <style>
+.image-item {
+  max-width: 300px;
+  max-height: 300px;
+}
 </style>

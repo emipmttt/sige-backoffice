@@ -2,15 +2,30 @@
   <div>
     <v-dialog v-model="create_course" width="500">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on" fixed dark fab right bottom class="primary--bg">
+        <v-btn
+          v-bind="attrs"
+          v-on="on"
+          fixed
+          dark
+          fab
+          right
+          bottom
+          class="primary--bg"
+        >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
       </template>
 
       <v-card class="secondary--bg" dark>
-        <v-card-title class="headline secondary--bg">Crear un curso nuevo.</v-card-title>
+        <v-card-title class="headline secondary--bg"
+          >Crear un curso nuevo.</v-card-title
+        >
         <v-card-text>
-          <v-file-input v-model="photo" accept="image/*" label="Foto de portada"></v-file-input>
+          <v-file-input
+            v-model="photo"
+            accept="image/*"
+            label="Foto de portada"
+          ></v-file-input>
           <v-text-field v-model="title" label="Título"></v-text-field>
           <v-textarea v-model="description" label="Descripción"></v-textarea>
           <v-dialog
@@ -23,17 +38,21 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="date"
-                label="Fecha"
+                label="Fecha de inicio"
                 prepend-icon="event"
                 readonly
                 v-bind="attrs"
                 v-on="on"
               ></v-text-field>
             </template>
-            <v-date-picker v-model="date" scrollable>
+            <v-date-picker locale="es-mx" v-model="date" scrollable>
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="date_modal = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+              <v-btn text color="primary" @click="date_modal = false"
+                >Cancelar</v-btn
+              >
+              <v-btn text color="primary" @click="$refs.dialog.save(date)"
+                >OK</v-btn
+              >
             </v-date-picker>
           </v-dialog>
           <v-switch v-model="public_course" label="Curso Publico"></v-switch>
@@ -89,6 +108,8 @@ export default {
         this.title = "";
         this.description = "";
         this.date = "";
+
+        this.$emit("createdCourse");
 
         this.create_course = false;
       } catch (error) {

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import CourseItem from "./components/CourseItem";
 export default {
   components: {
@@ -18,7 +18,12 @@ export default {
   computed: {
     ...mapState(["courses", "users"]),
   },
-  methods: {},
+  methods: {
+    ...mapActions(["get_courses"]),
+  },
+  async created() {
+    await this.get_courses();
+  },
 };
 </script>
 

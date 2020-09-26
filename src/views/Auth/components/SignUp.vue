@@ -41,13 +41,20 @@
       dense
       outlined
     ></v-text-field>
-    <v-btn :disabled="loading" type="submit" block class="mt-2 primary--bg white--text">Regístrate</v-btn>
+    <v-btn
+      :disabled="loading"
+      type="submit"
+      block
+      class="mt-2 primary--bg white--text"
+      >Regístrate</v-btn
+    >
     <v-btn
       @click="$router.push('/iniciar-sesion')"
       block
       class="mt-2 white--text"
       text
-    >Iniciar Sesión</v-btn>
+      >Iniciar Sesión</v-btn
+    >
     <v-btn block class="mt-2 white--text" text>¿Olvidaste tu contraseña?</v-btn>
     <v-btn block class="white--text mt-10" text>Aviso de Privacidad</v-btn>
   </form>
@@ -90,7 +97,7 @@ export default {
 
       firebase
         .auth()
-        .createUserWithEmailAndPassword(this.email, this.password)
+        .createUserWithEmailAndPassword(this.email.trim(), this.password)
         .then((user) => {
           firebase
             .firestore()

@@ -1,7 +1,7 @@
 <template>
   <div>
     <CoursesList :courses="courses" />
-    <CreateCourses />
+    <CreateCourses @createdCourse="getCourses" />
   </div>
 </template>
 

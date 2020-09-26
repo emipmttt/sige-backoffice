@@ -24,10 +24,10 @@
             @click="$router.push(route.path)"
           >
             <v-list-item-icon>
-              <v-icon>{{route.icon}}</v-icon>
+              <v-icon>{{ route.icon }}</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>{{route.title}}</v-list-item-title>
+              <v-list-item-title>{{ route.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -52,7 +52,7 @@
 <script>
 import { mapState } from "vuex";
 import firebase from "@/config/firebase";
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -90,6 +90,7 @@ export default {
   },
   methods: {
     ...mapMutations(["update_state"]),
+    ...mapActions(["get_courses"]),
     async get_users() {
       const user_query = await firebase.firestore().collection("users").get();
       var users = [];
@@ -97,18 +98,6 @@ export default {
         users.push({ id: user.id, ...user.data() });
       });
       this.update_state(["users", users]);
-    },
-    async get_courses() {
-      const course_query = await firebase
-        .firestore()
-        .collection("courses")
-        .get();
-
-      var courses = [];
-      course_query.forEach((course) => {
-        courses.push({ id: course.id, ...course.data() });
-      });
-      this.update_state(["courses", courses]);
     },
     changeDrawerState() {
       this.drawer = !this.drawer;

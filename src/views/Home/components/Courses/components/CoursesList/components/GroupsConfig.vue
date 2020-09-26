@@ -6,17 +6,22 @@
         <v-text-field v-model="title" label="Título"></v-text-field>
       </div>
       <div class="pa-1">
-        <v-select v-model="teacher" :items="teachers_list" label="Profesor"></v-select>
+        <v-select
+          v-model="teacher"
+          :items="teachers_list"
+          label="Profesor"
+        ></v-select>
       </div>
       <div class="pa-1">
         <v-btn type="submit">Añadir</v-btn>
       </div>
     </form>
     <v-row v-for="(group, index) in groups_course" :key="index">
-      <v-col>{{group.title}}</v-col>
-      <v-col
-        v-if="teachers.length"
-      >{{find_teacher(group.teacher).user.name}} {{find_teacher(group.teacher).user.lastname1 || ""}}</v-col>
+      <v-col>{{ group.title }}</v-col>
+      <v-col v-if="teachers.length"
+        >{{ find_teacher(group.teacher).user.name }}
+        {{ find_teacher(group.teacher).user.lastname1 || "" }}</v-col
+      >
       <v-col>
         <v-btn @click="delete_group(index)">
           <v-icon>delete</v-icon>
@@ -53,6 +58,9 @@ export default {
       return this.teachers.find((teacher) => teacher.id == id);
     },
     create_group() {
+      if (!this.title || !this.teacher) {
+        return alert("Copleta el campo de título y selecciona un profesor");
+      }
       let groups = this.groups_course;
       groups.push({
         id: uuidv4(),
