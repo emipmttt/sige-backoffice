@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CoursesList :courses="courses" />
+    <CoursesList @getCourses="getCourses" :courses="courses" />
     <CreateCourses @createdCourse="getCourses" />
   </div>
 </template>
@@ -22,6 +22,7 @@ export default {
       const courses_query = await firebase
         .firestore()
         .collection("courses")
+        .orderBy("createdAt", "desc")
         .get();
       const courses = [];
       courses_query.forEach((el) => {

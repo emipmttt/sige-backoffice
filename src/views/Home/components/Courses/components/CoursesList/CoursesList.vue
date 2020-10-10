@@ -12,7 +12,12 @@
         </thead>
         <tbody>
           <template v-for="course in courses">
-            <CourseItem :teachers="teachers" :course="course" :key="course.id" />
+            <CourseItem
+              @getCourses="$emit('getCourses')"
+              :teachers="teachers"
+              :course="course"
+              :key="course.id"
+            />
           </template>
         </tbody>
       </template>

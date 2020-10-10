@@ -1,58 +1,75 @@
 <template>
-  <div>
-    <v-dialog v-model="create_bill" width="500">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on" fixed dark fab right bottom class="primary--bg">
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </template>
+  <v-dialog v-model="create_bill" width="500">
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn
+        v-bind="attrs"
+        v-on="on"
+        fixed
+        dark
+        fab
+        right
+        bottom
+        class="primary--bg"
+      >
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+    </template>
 
-      <v-card class="secondary--bg" dark>
-        <v-card-title class="headline secondary--bg">Crear un pago nuevo.</v-card-title>
-        <v-card-text>
-          <v-autocomplete
-            v-model="user"
-            :items="users_list"
-            :search-input.sync="search_user"
-            prepend-icon="person"
-            label="Usuario"
-          ></v-autocomplete>
+    <v-card class="secondary--bg" dark>
+      <v-card-title class="headline secondary--bg"
+        >Crear un pago nuevo.</v-card-title
+      >
+      <v-card-text>
+        <v-autocomplete
+          v-model="user"
+          :items="users_list"
+          :search-input.sync="search_user"
+          prepend-icon="person"
+          label="Usuario"
+        ></v-autocomplete>
 
-          <v-text-field v-model="amount" label="Monto" type="number"></v-text-field>
-          <v-text-field v-model="description" label="Concepto"></v-text-field>
-          <v-dialog
-            ref="dialog"
-            v-model="date_modal"
-            :return-value.sync="date"
-            persistent
-            width="290px"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="date"
-                label="Fecha"
-                prepend-icon="event"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="date" scrollable>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="date_modal = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
-            </v-date-picker>
-          </v-dialog>
-        </v-card-text>
+        <v-text-field
+          v-model="amount"
+          label="Monto"
+          type="number"
+        ></v-text-field>
+        <v-text-field v-model="description" label="Concepto"></v-text-field>
+        <v-dialog
+          ref="dialog"
+          v-model="date_modal"
+          :return-value.sync="date"
+          persistent
+          width="290px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="date"
+              label="Fecha"
+              prepend-icon="event"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker v-model="date" scrollable>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="date_modal = false"
+              >Cancel</v-btn
+            >
+            <v-btn text color="primary" @click="$refs.dialog.save(date)"
+              >OK</v-btn
+            >
+          </v-date-picker>
+        </v-dialog>
+      </v-card-text>
 
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn class="red" text @click="create">Añadir Pago</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn class="red" text @click="create">Añadir Pago</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>

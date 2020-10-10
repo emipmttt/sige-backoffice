@@ -51,6 +51,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-btn @click="deleteItem" text dark class="primary--text">
+        <v-icon>delete</v-icon>
+      </v-btn>
     </td>
   </tr>
 </template>
@@ -75,6 +78,22 @@ export default {
     };
   },
   methods: {
+    async deleteItem() {
+      if (
+        confirm(
+          "¿realmente desea eliminar este curso? Sólo debe eliminar el curso cuando lo halla creado de forma equivocada"
+        )
+      ) {
+        await firebase
+          .firestore()
+          .collection("courses")
+          .doc(this.course.id)
+          .delete();
+        this.$emit("getCourses");
+
+        alert("Curso Eliminado correctamente");
+      }
+    },
     async update_course() {
       await firebase
         .firestore()
@@ -83,6 +102,7 @@ export default {
         .update({
           ...this.course,
         });
+      this.$emit("getCourses");
     },
     finish() {
       alert("Curso actualizado correctamente");
