@@ -107,6 +107,7 @@ export default {
           amount: this.amount,
           description: this.description,
           date: this.date,
+          createdAt: Date.now(),
         });
 
         this.user = "null";

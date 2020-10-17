@@ -1,5 +1,9 @@
 <template>
   <div class="pa-3">
+    <!-- <pre class="white--text">
+      {{ bills }}
+   </pre
+    > -->
     <v-simple-table class="secondary--bg" dark>
       <template v-slot:default>
         <thead>
@@ -11,18 +15,28 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="bill in bills" :key="bill.id">
-            <th
-              class="text-left"
-              v-if="users.length"
-            >{{find_user(bill.user).user.name}} {{find_user(bill.user).user.lastname1 || ""}}</th>
-            <th class="text-left">{{bill.amount}}</th>
-            <th class="text-left">{{bill.date}}</th>
-            <th class="text-left">{{bill.description}}</th>
+          <tr v-for="(bill, index) in bills" :key="bill.id + index">
+            <th class="text-left">
+              {{
+                find_user(bill.user)
+                  ? find_user(bill.user).user.name +
+                    " " +
+                    find_user(bill.user).user.lastname1
+                  : bill.name
+              }}
+            </th>
+
+            <th class="text-left">{{ bill.amount }}</th>
+            <th class="text-left">{{ bill.date }}</th>
+            <th class="text-left">{{ bill.description }}</th>
           </tr>
         </tbody>
       </template>
     </v-simple-table>
+    <br />
+    <v-btn @click="showMore" block color="red" class="white--text"
+      >Mostrar Más</v-btn
+    >
   </div>
 </template>
 
@@ -33,12 +47,35 @@ export default {
   data() {
     return {
       bills: [],
+      limit: 20,
+      offset: 20,
     };
   },
   computed: {
     ...mapState(["users"]),
   },
   methods: {
+    async showMore() {
+      const bills_query = await firebase
+        .firestore()
+        .collection("payments")
+        .orderBy("createdAt")
+        .limit(this.limit)
+        .startAfter(this.offset + 1)
+
+        .get();
+      var bills = [];
+      bills_query.forEach((bill) => {
+        bills.push({ id: bill.id, ...bill.data() });
+      });
+
+      const newBills = [...this.bills, ...bills];
+
+      this.bills = [];
+      this.bills = newBills;
+
+      this.offset += this.limit;
+    },
     find_user(id) {
       return this.users.find((user) => user.id == id);
     },
@@ -46,6 +83,7 @@ export default {
       const bills_query = await firebase
         .firestore()
         .collection("payments")
+        .limit(this.limit)
         .get();
       var bills = [];
       bills_query.forEach((bill) => {
