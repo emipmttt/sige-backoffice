@@ -12,27 +12,52 @@ import Courses from "../views/Home/components/Courses/Courses.vue"
 import Users from "../views/Home/components/Users/Users.vue"
 import Bill from "../views/Home/components/Bill/Bill.vue"
 import Notes from "../views/Home/components/Notes/Notes.vue"
+import Privacy from "../views/Home/components/Privacy/Privacy.vue"
+import Call from "../views/Home/components/Call/Call.vue"
 
 Vue.use(VueRouter)
 
-const routes = [
+const routes = [{
+    path: "/politica-de-privacidad",
+    component: Privacy
+  },
   {
     path: '/',
     component: Auth,
     redirect: "/iniciar-sesion",
-    children: [
-      { path: "iniciar-sesion", component: SignIn },
-      { path: "registrate", component: SignUp }
+    children: [{
+        path: "iniciar-sesion",
+        component: SignIn
+      },
+      {
+        path: "registrate",
+        component: SignUp
+      }
     ]
   },
   {
     path: '/h',
     component: Home,
-    children: [
-      { path: "usuarios", component: Users },
-      { path: "cursos", component: Courses },
-      { path: "pagos", component: Bill },
-      { path: "calificaciones", component: Notes },
+    children: [{
+        path: "usuarios",
+        component: Users
+      },
+      {
+        path: "cursos",
+        component: Courses
+      },
+      {
+        path: "pagos",
+        component: Bill
+      },
+      {
+        path: "calificaciones",
+        component: Notes
+      },
+      {
+        path: "llamados",
+        component: Call
+      },
     ]
   }
 ]

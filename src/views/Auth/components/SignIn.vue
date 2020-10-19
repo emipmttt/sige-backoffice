@@ -30,7 +30,13 @@
       >Regístrate</v-btn
     >
     <v-btn block class="mt-2 white--text" text>¿Olvidaste tu contraseña?</v-btn>
-    <v-btn block class="white--text mt-10" text>Aviso de Privacidad</v-btn>
+    <v-btn
+      @click="$router.push('/politica-de-privacidad')"
+      block
+      class="white--text mt-10"
+      text
+      >Aviso de Privacidad</v-btn
+    >
   </form>
 </template>
 

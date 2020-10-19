@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pa-2">
     <BillCSV @getBills="getBills" />
     <CreateBill @getBills="getBills" />
     <Bills v-if="bills" />

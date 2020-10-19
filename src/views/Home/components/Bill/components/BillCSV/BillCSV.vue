@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-4">
+  <div>
     <v-card class="secondary--bg pa-2">
       <v-file-input
         label="Añade un archivo csv"

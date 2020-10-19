@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-3">
+  <div>
     <!-- <pre class="white--text">
       {{ bills }}
    </pre

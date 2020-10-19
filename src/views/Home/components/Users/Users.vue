@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-3">
+  <div class="pa-2">
     <v-simple-table class="secondary--bg" dark>
       <template v-slot:default>
         <thead>

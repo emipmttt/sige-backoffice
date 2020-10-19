@@ -82,6 +82,12 @@ export default {
           title: "Calificaciones",
           permissions: [1, 2],
         },
+        {
+          path: "/h/llamados",
+          icon: "campaign",
+          title: "Llamados",
+          permissions: [1, 2],
+        },
       ],
     };
   },
