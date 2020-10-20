@@ -51,7 +51,6 @@
 
 <script>
 import { mapState } from "vuex";
-import firebase from "@/config/firebase";
 import { mapMutations, mapActions } from "vuex";
 export default {
   data() {
@@ -77,15 +76,15 @@ export default {
           permissions: [2],
         },
         {
-          path: "/h/calificaciones",
-          icon: "school",
-          title: "Calificaciones",
-          permissions: [1, 2],
-        },
-        {
           path: "/h/llamados",
           icon: "campaign",
           title: "Llamados",
+          permissions: [1, 2],
+        },
+        {
+          path: "/h/calificaciones",
+          icon: "school",
+          title: "Calificaciones",
           permissions: [1, 2],
         },
       ],
@@ -96,15 +95,8 @@ export default {
   },
   methods: {
     ...mapMutations(["update_state"]),
-    ...mapActions(["get_courses"]),
-    async get_users() {
-      const user_query = await firebase.firestore().collection("users").get();
-      var users = [];
-      user_query.forEach((user) => {
-        users.push({ id: user.id, ...user.data() });
-      });
-      this.update_state(["users", users]);
-    },
+    ...mapActions(["get_courses", "get_users"]),
+
     changeDrawerState() {
       this.drawer = !this.drawer;
     },

@@ -1,5 +1,6 @@
 <template>
   <div class="pa-2">
+    <h1 class="white--text">Calificaciones</h1>
     <v-row>
       <v-col xm="6" v-for="course in courses" :key="course.id">
         <CourseItem :course="course" />

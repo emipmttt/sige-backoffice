@@ -33,6 +33,16 @@ export default new Vuex.Store({
       });
       commit("update_state", ["courses", courses])
     },
+    async get_users({
+      commit
+    }) {
+      const user_query = await firebase.firestore().collection("users").get();
+      var users = [];
+      user_query.forEach((user) => {
+        users.push({ id: user.id, ...user.data() });
+      });
+      commit('update_state',["users", users])
+    },
   },
   modules: {}
 })

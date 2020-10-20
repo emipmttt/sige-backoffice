@@ -61,7 +61,7 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn class="red" text @click="create">Añadir Pago</v-btn>
+        <v-btn class="red" text @click="create">Añadir Llamado</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -97,7 +97,7 @@ export default {
   methods: {
     async create() {
       try {
-        await firebase.firestore().collection("payments").add({
+        await firebase.firestore().collection("calls").add({
           user: this.user,
           amount: this.amount,
           description: this.description,

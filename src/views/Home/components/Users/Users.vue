@@ -1,5 +1,6 @@
 <template>
   <div class="pa-2">
+    <h1 class="white--text">Usuarios</h1>
     <v-simple-table class="secondary--bg" dark>
       <template v-slot:default>
         <thead>

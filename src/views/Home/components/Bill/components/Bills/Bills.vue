@@ -12,6 +12,7 @@
             <th class="text-left">Monto</th>
             <th class="text-left">Fecha</th>
             <th class="text-left">Concepto</th>
+            <th class="text-left"></th>
           </tr>
         </thead>
         <tbody>
@@ -29,12 +30,13 @@
             <th class="text-left">{{ bill.amount }}</th>
             <th class="text-left">{{ bill.date }}</th>
             <th class="text-left">{{ bill.description }}</th>
+            <th class="text-left"><v-btn @click="deleteItem(bill.id)"><v-icon>delete</v-icon></v-btn></th>
           </tr>
         </tbody>
       </template>
     </v-simple-table>
     <br />
-    <v-btn @click="showMore" block color="red" class="white--text"
+    <v-btn @click="showMore" v-if='bills.length == 20' block color="red" class="white--text"
       >Mostrar Más</v-btn
     >
   </div>
@@ -55,6 +57,10 @@ export default {
     ...mapState(["users"]),
   },
   methods: {
+    async deleteItem(id) {
+      await firebase.firestore().collection("payments").doc(id).delete();
+      this.get_bills()
+    },
     async showMore() {
       const bills_query = await firebase
         .firestore()

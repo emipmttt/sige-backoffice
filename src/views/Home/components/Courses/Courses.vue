@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1 class="white--text ml-2">Cursos</h1> 
     <CoursesList @getCourses="getCourses" :courses="courses" />
     <CreateCourses @createdCourse="getCourses" />
   </div>
