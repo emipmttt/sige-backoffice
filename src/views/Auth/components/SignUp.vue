@@ -120,7 +120,9 @@ export default {
             })
             .then(() => {
               v.loading = false;
-              alert("Te has registrado correctamente");
+              alert(
+                "Te has registrado correctamente, contacta a un administrador para activar tu cuenta"
+              );
               v.$router.push("/iniciar-sesion");
             })
             .catch(() => {

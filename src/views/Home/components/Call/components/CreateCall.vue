@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="create_bill" width="500">
+  <v-dialog v-model="create_call" width="500">
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         v-bind="attrs"
@@ -16,9 +16,7 @@
     </template>
 
     <v-card class="secondary--bg" dark>
-      <v-card-title class="headline secondary--bg"
-        >Crear llamado.</v-card-title
-      >
+      <v-card-title class="headline secondary--bg">Crear llamado.</v-card-title>
       <v-card-text>
         <v-autocomplete
           v-model="user"
@@ -28,7 +26,7 @@
           label="Usuario"
         ></v-autocomplete>
 
-        <v-text-field v-model="description" label="Concepto"></v-text-field>
+        <v-text-field v-model="description" label="Descripción"></v-text-field>
         <v-dialog
           ref="dialog"
           v-model="date_modal"
@@ -77,11 +75,10 @@ export default {
       search_user: "",
 
       user: "",
-      amount: 0,
       date: "",
       description: "",
 
-      create_bill: false,
+      create_call: false,
       date_modal: false,
     };
   },
@@ -99,21 +96,19 @@ export default {
       try {
         await firebase.firestore().collection("calls").add({
           user: this.user,
-          amount: this.amount,
           description: this.description,
           date: this.date,
           createdAt: Date.now(),
         });
 
         this.user = "null";
-        this.amount = "";
         this.description = "";
         this.date = "";
 
         alert("Creado Correctamente");
-        this.$emit("getBills");
+        this.$emit("getCalls");
 
-        this.create_bill = false;
+        this.create_call = false;
       } catch (error) {
         alert(error);
         console.error(error);

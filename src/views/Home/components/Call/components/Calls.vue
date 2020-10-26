@@ -9,9 +9,9 @@
         <thead>
           <tr>
             <th class="text-left">Usuario</th>
-            <th class="text-left">Monto</th>
             <th class="text-left">Fecha</th>
-            <th class="text-left">Concepto</th>
+            <th class="text-left">Descripción</th>
+            <th class="text-left"></th>
           </tr>
         </thead>
         <tbody>
@@ -26,7 +26,6 @@
               }}
             </th>
 
-            <th class="text-left">{{ call.amount }}</th>
             <th class="text-left">{{ call.date }}</th>
             <th class="text-left">{{ call.description }}</th>
             <th class="text-left">
@@ -73,7 +72,7 @@ export default {
       const calls_query = await firebase
         .firestore()
         .collection("calls")
-        .orderBy("createdAt")
+        .orderBy("createdAt", "desc")
         .limit(this.limit)
         .startAfter(this.offset + 1)
 

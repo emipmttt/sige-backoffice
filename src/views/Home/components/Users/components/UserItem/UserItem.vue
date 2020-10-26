@@ -4,14 +4,15 @@
     <td>{{ user.user.lastname1 }} {{ user.user.lastname2 }}</td>
     <td>{{ user.user.email }}</td>
     <td>
-      <v-select
+      <Permissions :user="user" />
+      <!-- <v-select
         v-model="type"
         :items="typeItems"
         label="Tipo de Cuenta"
-      ></v-select>
+      ></v-select> -->
     </td>
     <td>
-      <v-switch v-model="active"></v-switch>
+      <v-switch color="primary" v-model="active"></v-switch>
     </td>
     <td>
       <v-dialog v-model="dialog" scrollable dark width="500">
@@ -146,10 +147,13 @@
 
 <script>
 import firebase from "@/config/firebase";
+import Permissions from "./Permissions";
+
 export default {
   props: {
     user: Object,
   },
+  components: { Permissions },
   data() {
     return {
       dialog: false,

@@ -1,30 +1,30 @@
 <template>
   <div class="pa-2">
     <h1 class="white--text">Llamados</h1>
-    <Calls/>
-    <CreateCall />
+    <Calls v-if="calls" />
+    <CreateCall @getCalls="getCalls" />
   </div>
 </template>
 
 <script>
 import CreateCall from "./components/CreateCall";
-import Calls from "./components/Calls"
+import Calls from "./components/Calls";
 import { mapActions } from "vuex";
 export default {
   components: {
     CreateCall,
-    Calls
+    Calls,
   },
   data() {
-    return { bills: true };
+    return { calls: true };
   },
   methods: {
     ...mapActions(["get_users"]),
-    getBills() {
-      this.bills = false;
+    getCalls() {
+      this.calls = false;
       var v = this;
       setTimeout(() => {
-        v.bills = true;
+        v.calls = true;
       }, 500);
     },
   },

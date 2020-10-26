@@ -18,7 +18,7 @@
       <v-list dense nav>
         <template v-for="(route, index) in routerList">
           <v-list-item
-            v-if="route.permissions.includes(user.type)"
+            v-if="user.permissions[route.permissions]"
             :key="index"
             link
             @click="$router.push(route.path)"
@@ -61,31 +61,31 @@ export default {
           path: "/h/usuarios",
           icon: "people",
           title: "Usuarios",
-          permissions: [2],
+          permissions: "users",
         },
         {
           path: "/h/cursos",
           icon: "book",
           title: "Cursos",
-          permissions: [1, 2],
+          permissions: "courses",
         },
         {
           path: "/h/pagos",
           icon: "receipt_long",
           title: "Pagos",
-          permissions: [2],
+          permissions: "payments",
         },
         {
           path: "/h/llamados",
           icon: "campaign",
           title: "Llamados",
-          permissions: [1, 2],
+          permissions: "call",
         },
         {
           path: "/h/calificaciones",
           icon: "school",
           title: "Calificaciones",
-          permissions: [1, 2],
+          permissions: "notes",
         },
       ],
     };

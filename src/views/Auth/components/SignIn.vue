@@ -72,7 +72,7 @@ export default {
             .doc(user.user.uid)
             .get()
             .then((response) => {
-              if (response.data().type == 2 || response.data().type == 1) {
+              if (response.data().permissions.admin) {
                 if (response.data().active) {
                   v.loading = false;
                   alert("Bienvenido");
