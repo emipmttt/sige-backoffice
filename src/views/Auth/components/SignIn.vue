@@ -72,18 +72,20 @@ export default {
             .doc(user.user.uid)
             .get()
             .then((response) => {
-              if (response.data().permissions.admin) {
+              if (
+                response.data().permissions &&
+                response.data().permissions.admin
+              ) {
                 if (response.data().active) {
                   v.loading = false;
                   alert("Bienvenido");
-                  this.update_state([
-                    "user",
-                    { id: response.id, ...response.data() },
-                  ]);
-                  localStorage.setItem(
-                    "sige_user",
-                    JSON.stringify({ id: response.id, ...response.data() })
-                  );
+
+                  const userdata = { id: response.id, ...response.data() };
+
+                  this.update_state(["user", userdata]);
+
+                  localStorage.setItem("sige_user", JSON.stringify(userdata));
+
                   v.$router.push("/h/");
                 } else {
                   alert(

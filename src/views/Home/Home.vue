@@ -18,7 +18,7 @@
       <v-list dense nav>
         <template v-for="(route, index) in routerList">
           <v-list-item
-            v-if="user.permissions[route.permissions]"
+            v-if="user.permissions && user.permissions[route.permissions]"
             :key="index"
             link
             @click="$router.push(route.path)"
@@ -102,11 +102,13 @@ export default {
     },
     logout() {
       this.$router.push("/");
+      localStorage.removeItem("");
     },
   },
   async created() {
     await this.get_users();
     await this.get_courses();
+    console.log(this.user);
   },
 };
 </script>

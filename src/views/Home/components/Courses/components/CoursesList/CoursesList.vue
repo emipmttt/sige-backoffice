@@ -45,7 +45,7 @@ export default {
       const teachers_query = await firebase
         .firestore()
         .collection("users")
-        .where("type", "==", 1)
+        .where("permissions.notes", "==", true)
         .get();
 
       var teachers = [];

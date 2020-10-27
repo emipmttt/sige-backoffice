@@ -24,12 +24,6 @@
             ></v-text-field>
             <v-switch v-model="course.public" label="Curso Publico"></v-switch>
             <v-divider></v-divider>
-            <GroupsConfig
-              @update_course="update_groups($event)"
-              :teachers="teachers"
-              :groups="course.groups"
-            />
-            <v-divider></v-divider>
 
             <BillsConfig
               @update_bills="update_bills($event)"
@@ -49,6 +43,21 @@
               >Actualizar</v-btn
             >
           </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="groups_edit" scrollable dark width="700">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn text dark v-bind="attrs" v-on="on" class="primary--text">
+            <v-icon>groups</v-icon>
+          </v-btn>
+        </template>
+
+        <v-card>
+          <GroupsConfig
+            @update_course="update_groups($event)"
+            :teachers="teachers"
+            :groups="course.groups"
+          />
         </v-card>
       </v-dialog>
       <v-btn @click="deleteItem" text dark class="primary--text">
@@ -75,13 +84,14 @@ export default {
   data() {
     return {
       dialog_edit: false,
+      groups_edit: false,
     };
   },
   methods: {
     async deleteItem() {
       if (
         confirm(
-          "¿realmente desea eliminar este curso? Sólo debe eliminar el curso cuando lo halla creado de forma equivocada"
+          "¿realmente desea eliminar este curso? Sólo debería eliminar el curso cuando lo halla creado de forma equivocada"
         )
       ) {
         await firebase

@@ -6,15 +6,27 @@
 
 <script>
 import { mapMutations } from "vuex";
+import firebase from "@/config/firebase";
 export default {
   name: "App",
   methods: {
     ...mapMutations(["update_state"]),
   },
-  mounted() {
+  async mounted() {
     var user = localStorage.getItem("sige_user");
     if (user) {
-      this.update_state(["user", JSON.parse(user)]);
+      user = JSON.parse(user);
+      const userQuery = await firebase
+        .firestore()
+        .collection("users")
+        .doc(user.id)
+        .get();
+
+      user = { id: userQuery.id, ...userQuery.data() };
+      localStorage.setItem("sige_user", JSON.stringify(user));
+      this.update_state(["user", user]);
+    } else {
+      this.$router.push("/");
     }
   },
 };
