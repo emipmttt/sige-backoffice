@@ -14,6 +14,7 @@ import Bill from "../views/Home/components/Bill/Bill.vue"
 import Notes from "../views/Home/components/Notes/Notes.vue"
 import Privacy from "../views/Home/components/Privacy/Privacy.vue"
 import Call from "../views/Home/components/Call/Call.vue"
+import Course from "../views/Home/components/Course/Course.vue"
 
 Vue.use(VueRouter)
 
@@ -57,6 +58,10 @@ const routes = [{
       {
         path: "llamados",
         component: Call
+      },
+      {
+        path: "curso/:courseId",
+        component: Course
       },
     ]
   }

@@ -8,7 +8,7 @@
     <td>
       <v-dialog v-model="dialog_edit" scrollable dark width="700">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn text dark v-bind="attrs" v-on="on" class="primary--text">
+          <v-btn text dark v-bind="attrs" v-on="on" class="light--text">
             <v-icon>create</v-icon>
           </v-btn>
         </template>
@@ -45,22 +45,16 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <v-dialog v-model="groups_edit" scrollable dark width="700">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn text dark v-bind="attrs" v-on="on" class="primary--text">
-            <v-icon>groups</v-icon>
-          </v-btn>
-        </template>
+      <v-btn
+        @click="$router.push('/h/curso/' + course.id)"
+        text
+        dark
+        class="light--text"
+      >
+        <v-icon>groups</v-icon>
+      </v-btn>
 
-        <v-card>
-          <GroupsConfig
-            @update_course="update_groups($event)"
-            :teachers="teachers"
-            :groups="course.groups"
-          />
-        </v-card>
-      </v-dialog>
-      <v-btn @click="deleteItem" text dark class="primary--text">
+      <v-btn @click="deleteItem" text dark class="light--text">
         <v-icon>delete</v-icon>
       </v-btn>
     </td>
@@ -69,12 +63,10 @@
 
 <script>
 import firebase from "@/config/firebase";
-import GroupsConfig from "./GroupsConfig";
 import BillsConfig from "./BillsConfig";
 
 export default {
   components: {
-    GroupsConfig,
     BillsConfig,
   },
   props: {
