@@ -2,15 +2,15 @@
   <tr>
     <td>{{ group.title }}</td>
     <td>
-      <v-dialog v-model="dialog" width="500">
+      <v-dialog class="secondary--bg" v-model="dialog" width="500">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn class="secondary--bg" v-bind="attrs" v-on="on"
-            ><v-icon>article</v-icon></v-btn
-          >
+          <v-btn class="secondary--bg" v-bind="attrs" v-on="on">
+            <v-icon>article</v-icon>
+          </v-btn>
         </template>
 
-        <v-card>
-          <v-card-title class="headline grey lighten-2">
+        <v-card dark class="secondary--bg">
+          <v-card-title dark class="headline secondary--bg lighten-2">
             Materias
           </v-card-title>
 
@@ -20,13 +20,13 @@
               <v-text-field
                 v-model="matterName"
                 class="mr-2"
-                label="Nuevo Grupo"
+                label="Nueva Materia"
                 outlined
                 dense
               ></v-text-field>
 
               <v-select
-                v-model="teacher"
+                v-model="teacherSelected"
                 :items="teachers"
                 label="Profesor"
                 dense
@@ -64,10 +64,19 @@ export default {
       dialog: false,
       matterName: "",
       teachers: [],
+      teacherSelected: "",
     };
   },
   methods: {
-    createGroup() {},
+    async createGroup() {
+      const createGroup = await firebase.firestore().collection("matters").add({
+        group: this.group.id,
+        name: this.matterName,
+        teacher: this.teacherSelected,
+      });
+
+      console.log(createGroup);
+    },
 
     async get_teachers() {
       const teachers_query = await firebase
@@ -82,6 +91,13 @@ export default {
           id: teacher.id,
           ...teacher.data(),
         });
+      });
+
+      teachers = teachers.map((teacher) => {
+        return {
+          text: teacher.user.name,
+          value: teachers.id,
+        };
       });
       this.teachers = teachers;
     },
