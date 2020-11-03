@@ -15,7 +15,6 @@
 
         <v-card>
           <v-card-title class="headline">Editar</v-card-title>
-
           <v-card-text>
             <v-text-field v-model="course.title" label="Título"></v-text-field>
             <v-text-field
@@ -53,7 +52,6 @@
       >
         <v-icon>groups</v-icon>
       </v-btn>
-
       <v-btn @click="deleteItem" text dark class="light--text">
         <v-icon>delete</v-icon>
       </v-btn>
@@ -124,7 +122,8 @@ export default {
 
 <style>
 .image-item {
-  max-width: 300px;
-  max-height: 300px;
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 5px;
 }
 </style>

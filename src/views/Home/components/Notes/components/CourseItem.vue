@@ -1,119 +1,138 @@
 <template>
-  <v-card dark class="pa-2 secondary--bg">
-    <h1 class="pl-4">{{ course.title }}</h1>
-    <v-simple-table>
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-left">Estudiante</th>
-            <template v-for="(group, index) in course.groups">
-              <th
-                v-if="group.teacher == user.id"
-                :key="index"
-                class="text-left"
-              >
-                {{ group.title }}
-              </th>
-            </template>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="user_item in users_filtered" :key="user_item.id">
-            <td>
-              {{ user_item.user.name }} {{ user_item.user.lastname || "" }}
-            </td>
-            <template v-for="(group, index) in course.groups">
-              <td
-                v-if="group.teacher == user.id"
-                :key="index"
-                class="text-left"
-              >
-                <v-text-field
-                  :class="'user_' + user_item.id + ' group_' + group.id"
-                  label="Calificación"
-                  type="number"
-                  autocomplete="off"
-                  :value="
-                    notes[user_item.id + '_' + course.id + '_' + group.id]
-                      ? notes[user_item.id + '_' + course.id + '_' + group.id]
-                          .value
-                      : ''
-                  "
-                ></v-text-field>
-              </td>
-            </template>
-            <td>
-              <v-icon @click="set_note(user_item.id)">check</v-icon>
-            </td>
-          </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
-  </v-card>
+  <div v-if="isMyCourse">
+    <table style="width: 100%">
+      <thead>
+        <tr>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(group, index) in myGroups" :key="index">
+          <td>{{ group.title }}</td>
+          <td style="text-align: right">
+            <MatterNotes
+              :group="group"
+              :matters="matters"
+              :students="students"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- <pre>
+      {{ course }}
+    </pre> -->
+  </div>
 </template>
 
 <script>
-import firebase from "@/config/firebase";
 import { mapState } from "vuex";
+import firebase from "@/config/firebase";
+import MatterNotes from "./MatterNotes";
 export default {
   props: {
     course: Object,
   },
+  components: { MatterNotes },
   data() {
     return {
-      notes: {},
+      groups: [],
+      students: [],
+      matters: [],
     };
   },
   computed: {
-    ...mapState(["users", "user"]),
-    users_filtered() {
-      return this.users.filter((user) => {
-        return user.courses && user.courses.includes(this.course.id);
+    ...mapState(["user"]),
+    isMyCourse() {
+      var groups = {};
+      this.matters.forEach((matter) => {
+        groups[matter.group] = true;
       });
+
+      var course = "";
+
+      Object.keys(groups).forEach((group) => {
+        const groupFind = this.groups.find((groupObjectFind) => {
+          return groupObjectFind.id == group;
+        });
+
+        course = groupFind.course;
+      });
+
+      return course == this.course.id;
+    },
+    myGroups() {
+      return this.groups;
     },
   },
   methods: {
-    async set_note(id) {
-      var v = this;
-      let notes = document.querySelectorAll(".user_" + id);
-      await notes.forEach(async (note) => {
-        await note.classList.forEach(async (el) => {
-          if (el.includes("group_")) {
-            let value = note.querySelector("input").value;
-            let group = el.split("_")[1];
-            await firebase
-              .firestore()
-              .collection("notes")
-              .doc(id + "_" + v.course.id + "_" + group)
-              .set({
-                group,
-                user: id,
-                value,
-                course: v.course.id,
-              });
-          }
-        });
-      });
-      alert("Calificaciones actualizadas");
-    },
-    async get_notes() {
-      const notes_query = await firebase
+    async getStudents() {
+      const studentsQuery = await firebase
         .firestore()
-        .collection("notes")
-        .where("course", "==", this.course.id)
+        .collection("users")
+        .where("courses", "array-contains", this.course.id)
         .get();
 
-      var notes = {};
+      var students = [];
 
-      notes_query.forEach((note) => {
-        notes[note.id] = { id: note.id, ...note.data() };
+      studentsQuery.forEach((student) => {
+        students.push({
+          id: student.id,
+          ...student.data(),
+        });
       });
 
-      this.notes = notes;
+      this.students = students;
+    },
+    async getGroups() {
+      const groupsQuery = await firebase
+        .firestore()
+        .collection("groups")
+        .where("course", "==", this.course.id)
+        .orderBy("createdAt", "desc")
+        .get();
+
+      var groups = [];
+
+      groupsQuery.forEach((group) => {
+        groups.push({
+          id: group.id,
+          ...group.data(),
+        });
+      });
+
+      this.groups = groups;
+    },
+    async getMyMatters() {
+      const mattersQuery = await firebase
+        .firestore()
+        .collection("matters")
+        .where("teacher", "==", this.user.id)
+        .get();
+
+      var matters = [];
+
+      mattersQuery.forEach((matter) => {
+        matters.push({
+          id: matter.id,
+          ...matter.data(),
+        });
+      });
+
+      this.matters = matters;
+    },
+  },
+  watch: {
+    isMyCourse(value) {
+      console.log(value);
+      if (value) this.$emit("show");
     },
   },
   async mounted() {
-    await this.get_notes();
+    await this.getGroups();
+    await this.getMyMatters();
+    await this.getStudents();
   },
 };
 </script>

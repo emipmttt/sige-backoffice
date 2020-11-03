@@ -9,7 +9,9 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">SIGE</v-list-item-title>
-          <v-list-item-subtitle>Administración</v-list-item-subtitle>
+          <v-list-item-subtitle v-if="user.user">{{
+            user.user.name
+          }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
 

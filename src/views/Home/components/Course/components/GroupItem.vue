@@ -33,19 +33,44 @@
                 outlined
               ></v-select>
 
-              <v-btn @click="createGroup" color="primary" class="ml-2"
-                >Añadir Grupo</v-btn
+              <v-btn @click="createMatter" color="primary" class="ml-2"
+                >Añadir Materia</v-btn
               >
             </div>
+
+            <table style="width: 100%">
+              <thead>
+                <tr>
+                  <th>Materia</th>
+                  <th>Profesor</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="matter in matters" :key="matter.id">
+                  <td>{{ matter.name }}</td>
+                  <td v-if="teachers.length && getTeacher(matter.teacher)">
+                    {{ getTeacher(matter.teacher).text }}
+                  </td>
+                  <td style="text-align: right">
+                    <v-btn
+                      @click="deleteMatter(matter.id)"
+                      color="primary"
+                      class="ml-2"
+                    >
+                      <v-icon> delete </v-icon>
+                    </v-btn>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </v-card-text>
 
           <v-divider></v-divider>
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="dialog = false">
-              I accept
-            </v-btn>
+            <v-btn color="primary" text @click="dialog = false"> Cerrar </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -65,17 +90,48 @@ export default {
       matterName: "",
       teachers: [],
       teacherSelected: "",
+
+      matters: [],
     };
   },
   methods: {
-    async createGroup() {
-      const createGroup = await firebase.firestore().collection("matters").add({
+    getTeacher(findTeacher) {
+      return this.teachers.find((teacher) => {
+        return teacher.value == findTeacher;
+      });
+    },
+
+    async deleteMatter(id) {
+      await firebase.firestore().collection("matters").doc(id).delete();
+      await this.get_matters();
+    },
+    async createMatter() {
+      await firebase.firestore().collection("matters").add({
         group: this.group.id,
         name: this.matterName,
         teacher: this.teacherSelected,
       });
 
-      console.log(createGroup);
+      await this.get_matters();
+    },
+
+    async get_matters() {
+      const mattersQuery = await firebase
+        .firestore()
+        .collection("matters")
+        .where("group", "==", this.group.id)
+        .get();
+
+      var matters = [];
+
+      mattersQuery.forEach((el) => {
+        matters.push({
+          id: el.id,
+          ...el.data(),
+        });
+      });
+
+      this.matters = matters;
     },
 
     async get_teachers() {
@@ -86,6 +142,7 @@ export default {
         .get();
 
       var teachers = [];
+
       teachers_query.forEach((teacher) => {
         teachers.push({
           id: teacher.id,
@@ -96,7 +153,7 @@ export default {
       teachers = teachers.map((teacher) => {
         return {
           text: teacher.user.name,
-          value: teachers.id,
+          value: teacher.id,
         };
       });
       this.teachers = teachers;
@@ -104,6 +161,7 @@ export default {
   },
   async mounted() {
     await this.get_teachers();
+    await this.get_matters();
   },
 };
 </script>
