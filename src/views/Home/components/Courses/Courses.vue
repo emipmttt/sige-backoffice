@@ -1,7 +1,13 @@
 <template>
   <div>
-    <h1 class="white--text ml-2">Cursos</h1> 
-    <CoursesList @getCourses="getCourses" :courses="courses" />
+    <h1 class="white--text ml-2">Cursos</h1>
+    <v-text-field
+      dark
+      outlined
+      label="Busqueda"
+      v-model="search"
+    ></v-text-field>
+    <CoursesList @getCourses="getCourses" :courses="courses_filtered" />
     <CreateCourses @createdCourse="getCourses" />
   </div>
 </template>
@@ -16,7 +22,16 @@ export default {
   data() {
     return {
       courses: [],
+      search: "",
     };
+  },
+  computed: {
+    courses_filtered() {
+      return this.courses.filter((course) => {
+        if (course.title.toLowerCase().includes(this.search)) return true;
+        return false;
+      });
+    },
   },
   methods: {
     async getCourses() {

@@ -27,7 +27,7 @@
           <tbody>
             <tr v-for="student in students" :key="student.id">
               <td style="text-align: left">{{ student.user.name }}</td>
-              <th
+              <td
                 style="text-align: left"
                 v-for="matter in mattersGroup"
                 :key="matter.id"
@@ -36,11 +36,23 @@
                   hide-details
                   :data-student="student.id"
                   :data-matter="matter.id"
+                  data-type-input="value"
+                  label="Calificación"
                   dense
                   outlined
                   type="number"
                 ></v-text-field>
-              </th>
+                <v-text-field
+                  hide-details
+                  :data-student="student.id"
+                  :data-matter="matter.id"
+                  data-type-input="observations"
+                  label="Observaciones"
+                  dense
+                  outlined
+                  type="test"
+                ></v-text-field>
+              </td>
               <td style="text-align: left">
                 <v-btn @click="saveNote(student)">
                   <v-icon>check</v-icon>
@@ -84,7 +96,7 @@ export default {
   methods: {
     async saveNote(student) {
       var elements = document.querySelectorAll(
-        `[data-student='${student.id}']`
+        `[data-student='${student.id}'][data-type-input='value']`
       );
 
       elements = Array.from(elements);
@@ -94,6 +106,7 @@ export default {
           matter: matter.dataset.matter,
           value: matter.value,
           user: matter.dataset.student,
+          // observations:
         });
       }
 

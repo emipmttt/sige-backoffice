@@ -1,6 +1,12 @@
 <template>
   <div class="pa-2">
     <h1 class="white--text">Usuarios</h1>
+    <v-text-field
+      dark
+      outlined
+      label="Busqueda"
+      v-model="search"
+    ></v-text-field>
     <v-simple-table class="secondary--bg" dark>
       <template v-slot:default>
         <thead>
@@ -14,7 +20,7 @@
           </tr>
         </thead>
         <tbody>
-          <template v-for="user in users">
+          <template v-for="user in users_filtered">
             <UserItem :user="user" :key="user.id" />
           </template>
         </tbody>
@@ -31,7 +37,37 @@ export default {
   data() {
     return {
       users: [],
+      search: "",
     };
+  },
+  computed: {
+    users_filtered() {
+      return this.users.filter((user) => {
+        console.log(user);
+        if (
+          (user.user.name &&
+            user.user.name.toLowerCase().includes(this.search.toLowerCase())) ||
+          (user.user.lastname1 &&
+            user.user.lastname1
+              .toLowerCase()
+              .includes(this.search.toLowerCase())) ||
+          (user.user.lastname2 &&
+            user.user.lastname2
+              .toLowerCase()
+              .includes(this.search.toLowerCase())) ||
+          (user.user.email &&
+            user.user.email
+              .toLowerCase()
+              .includes(this.search.toLowerCase())) ||
+          (user.user.phone &&
+            user.user.phone.toLowerCase().includes(this.search.toLowerCase()))
+        ) {
+          return true;
+        }
+
+        return false;
+      });
+    },
   },
   methods: {
     async get_users() {
