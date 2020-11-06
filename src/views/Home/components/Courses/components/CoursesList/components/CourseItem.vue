@@ -5,10 +5,15 @@
     </td>
     <td>{{ course.title }}</td>
     <td>{{ course.date }}</td>
-    <td>
+    <td class="text-right">
       <v-dialog v-model="dialog_edit" scrollable dark width="700">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn text dark v-bind="attrs" v-on="on" class="light--text">
+          <v-btn
+            color="primary"
+            v-bind="attrs"
+            v-on="on"
+            class="light--text mr-2"
+          >
             <v-icon>create</v-icon>
           </v-btn>
         </template>
@@ -46,13 +51,12 @@
       </v-dialog>
       <v-btn
         @click="$router.push('/h/curso/' + course.id)"
-        text
-        dark
-        class="light--text"
+        color="primary"
+        class="light--text mr-2"
       >
         <v-icon>groups</v-icon>
       </v-btn>
-      <v-btn @click="deleteItem" text dark class="light--text">
+      <v-btn @click="deleteItem" color="primary" class="light--text">
         <v-icon>delete</v-icon>
       </v-btn>
     </td>

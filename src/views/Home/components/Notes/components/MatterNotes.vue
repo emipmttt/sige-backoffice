@@ -1,15 +1,18 @@
 <template>
   <v-dialog v-model="dialog">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn v-bind="attrs" v-on="on">
+      <v-btn color="primary" v-bind="attrs" v-on="on">
         <v-icon>article</v-icon>
       </v-btn>
     </template>
 
-    <v-card>
-      <v-card-title class="headline grey lighten-2"> Materias </v-card-title>
+    <v-card dark>
+      <v-card-title class="headline white--text secondary--bg lighten-2">
+        Calificar
+      </v-card-title>
 
-      <v-card-text>
+      <v-card-text class="secondary--bg">
+        <br />
         <table width="100%">
           <thead>
             <tr>
@@ -53,8 +56,8 @@
                   type="test"
                 ></v-text-field>
               </td>
-              <td style="text-align: left">
-                <v-btn @click="saveNote(student)">
+              <td style="text-align: right">
+                <v-btn color="primary" @click="saveNote(student)">
                   <v-icon>check</v-icon>
                 </v-btn>
               </td>
@@ -65,7 +68,7 @@
 
       <v-divider></v-divider>
 
-      <v-card-actions>
+      <v-card-actions class="secondary--bg">
         <v-spacer></v-spacer>
         <v-btn color="primary" text @click="dialog = false"> Cerrar </v-btn>
       </v-card-actions>
@@ -89,25 +92,44 @@ export default {
   },
   computed: {
     mattersGroup() {
-      console.log(this.students);
       return this.matters.filter((matter) => matter.group == this.group.id);
     },
   },
   methods: {
     async saveNote(student) {
       var elements = document.querySelectorAll(
-        `[data-student='${student.id}'][data-type-input='value']`
+        `[data-student='${student.id}']`
       );
 
       elements = Array.from(elements);
 
+      var sortElements = {};
+
       for (const matter of elements) {
-        await firebase.firestore().collection("notes").add({
-          matter: matter.dataset.matter,
-          value: matter.value,
-          user: matter.dataset.student,
-          // observations:
-        });
+        if (typeof sortElements[matter.dataset.matter] == "object") {
+          sortElements[matter.dataset.matter][matter.dataset.typeInput] =
+            matter.value;
+        } else {
+          sortElements[matter.dataset.matter] = {};
+          sortElements[matter.dataset.matter][matter.dataset.typeInput] =
+            matter.value;
+        }
+      }
+
+      const arrayElements = Object.keys(sortElements);
+
+      for (const arrayElement of arrayElements) {
+        const data = {
+          matter: arrayElement,
+          user: student.id,
+          ...sortElements[arrayElement],
+        };
+
+        await firebase
+          .firestore()
+          .collection("notes")
+          .doc(data.user + data.matter)
+          .set(data);
       }
 
       alert("Calificación actualizada correctamente");

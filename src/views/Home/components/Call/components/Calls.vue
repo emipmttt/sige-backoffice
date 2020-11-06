@@ -29,7 +29,7 @@
             <th class="text-left">{{ call.date }}</th>
             <th class="text-left">{{ call.description }}</th>
             <th class="text-left">
-              <v-btn @click="deleteItem(call.id)"
+              <v-btn @click="deleteItem(call.id)" color="primary"
                 ><v-icon>delete</v-icon></v-btn
               >
             </th>

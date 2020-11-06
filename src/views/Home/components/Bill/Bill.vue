@@ -2,6 +2,7 @@
   <div class="pa-2">
     <h1 class="white--text">Pagos</h1>
     <BillCSV @getBills="getBills" />
+    <br />
     <CreateBill @getBills="getBills" />
     <Bills v-if="bills" />
   </div>
@@ -12,7 +13,7 @@ import CreateBill from "./components/CreateBill/CreateBill";
 import BillCSV from "./components/BillCSV/BillCSV";
 import Bills from "./components/Bills/Bills";
 
-import { mapActions, } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -33,9 +34,9 @@ export default {
       }, 500);
     },
   },
-  created(){
-    this.get_users()
-  }
+  created() {
+    this.get_users();
+  },
 };
 </script>
 
