@@ -1,9 +1,13 @@
 <template>
   <div>
     <div class="d-flex align-center mb-6">
-      <v-autocomplete
+      <!-- <v-autocomplete
         :items="usersAutocomplete"
-        v-model="userSelected"
+        
+      ></v-autocomplete> -->
+
+      <v-text-field
+        v-model="searchText"
         dense
         dark
         outlined
@@ -11,7 +15,8 @@
         hide-details
         label="Busqueda"
         class="mr-2"
-      ></v-autocomplete>
+      ></v-text-field>
+
       <v-btn @click="searchBills" color="primary"> Buscar </v-btn>
     </div>
 
@@ -66,15 +71,18 @@
 
 <script>
 import firebase from "@/config/firebase";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
+      search: false,
+      searchedBills: [],
+
       bills: [],
       limit: 20,
       offset: 20,
 
-      userSelected: "",
+      searchText: "",
     };
   },
   computed: {
@@ -92,18 +100,30 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      getBills: "bills/getBills",
+      searchBillsAction: "bills/searchBills",
+    }),
     async searchBills() {
-      const bills_query = await firebase
-        .firestore()
-        .collection("payments")
-        .orderBy("createdAt")
-        .where("")
-        .get();
-      var bills = [];
-      bills_query.forEach((bill) => {
-        bills.push({ id: bill.id, ...bill.data() });
-      });
-      this.bills = bills;
+      this.search = true;
+
+      const responseSearch = await this.searchBillsAction(this.searchText);
+
+      // await getBills({});
+
+      console.log(responseSearch);
+
+      // const bills_query = await firebase
+      //   .firestore()
+      //   .collection("payments")
+      //   .orderBy("createdAt")
+      //   // .where("")
+      //   .get();
+      // var bills = [];
+      // bills_query.forEach((bill) => {
+      //   bills.push({ id: bill.id, ...bill.data() });
+      // });
+      // this.bills = bills;
     },
     async deleteItem(id) {
       await firebase.firestore().collection("payments").doc(id).delete();
@@ -134,17 +154,11 @@ export default {
       return this.users.find((user) => user.id == id);
     },
     async get_bills() {
-      const bills_query = await firebase
-        .firestore()
-        .collection("payments")
-        .orderBy("createdAt")
-        .limit(this.limit)
-        .get();
-      var bills = [];
-      bills_query.forEach((bill) => {
-        bills.push({ id: bill.id, ...bill.data() });
+      const bills_query = await this.getBills({
+        limit: this.limit,
       });
-      this.bills = bills;
+
+      this.bills = bills_query.data.data;
     },
   },
   async created() {

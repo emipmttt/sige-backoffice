@@ -1,6 +1,6 @@
 <template>
   <div class="pa-2">
-    <h1 class="white--text">Pagos</h1>
+    <h1 class="white--text">Pagos Estudiantes</h1>
     <BillCSV @getBills="getBills" />
     <br />
     <CreateBill @getBills="getBills" />

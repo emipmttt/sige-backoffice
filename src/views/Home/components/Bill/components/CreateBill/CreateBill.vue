@@ -73,8 +73,7 @@
 </template>
 
 <script>
-import firebase from "@/config/firebase";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   data() {
@@ -100,22 +99,26 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      addBills: "bills/addBills",
+    }),
     async create() {
       try {
-        await firebase.firestore().collection("payments").add({
-          user: this.user,
-          amount: this.amount,
-          description: this.description,
-          date: this.date,
-          createdAt: Date.now(),
-        });
+        const response = await this.addBills([
+          {
+            user: this.user,
+            amount: this.amount,
+            description: this.description,
+            date: this.date,
+            createdAt: Date.now(),
+          },
+        ]);
 
         this.user = "null";
         this.amount = "";
         this.description = "";
         this.date = "";
-
-        alert("Creado Correctamente");
+        alert(response.data.message);
         this.$emit("getBills");
 
         this.create_bill = false;
