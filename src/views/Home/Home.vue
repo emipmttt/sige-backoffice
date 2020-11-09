@@ -75,13 +75,13 @@ export default {
           path: "/h/pagos-estudiantes",
           icon: "receipt_long",
           title: "Pagos Estudiantes",
-          permissions: "payments-students",
+          permissions: "paymentsStudents",
         },
         {
           path: "/h/pagos-externos",
           icon: "receipt_long",
           title: "Pagos Externos",
-          permissions: "payments-external",
+          permissions: "paymentsExternal",
         },
         {
           path: "/h/llamados",

@@ -48,7 +48,13 @@ const routes = [{
         component: Courses
       },
       {
-        path: "pagos",
+        path: "pagos-estudiantes",
+        name: "payment-student",
+        component: Bill
+      },
+      {
+        path: "pagos-externos",
+        name: "payment-external",
         component: Bill
       },
       {

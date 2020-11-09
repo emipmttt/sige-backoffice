@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div class="d-flex align-center mb-6">
-      <!-- <v-autocomplete
-        :items="usersAutocomplete"
-      ></v-autocomplete> -->
-
+    <form @submit.prevent="searchBills" class="d-flex align-center mb-6">
       <v-text-field
         v-model="searchText"
         dense
@@ -16,8 +12,16 @@
         class="mr-2"
       ></v-text-field>
 
-      <v-btn @click="searchBills" color="primary"> Buscar </v-btn>
-    </div>
+      <v-btn type="submit" color="primary"> Buscar </v-btn>
+      <v-btn
+        @click="(searchText = ''), get_bills()"
+        class="ml-1"
+        color="primary"
+        text
+      >
+        Cancelar
+      </v-btn>
+    </form>
 
     <v-simple-table class="secondary--bg" dark>
       <template v-slot:default>
@@ -32,7 +36,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(bill, index) in bills" :key="bill.id + index">
+          <tr v-for="(bill, index) in bills" :key="bill._id + index">
             <!-- <th class="text-left">{{ bill.id }}</th> -->
             <th class="text-left">
               {{
@@ -110,7 +114,7 @@ export default {
 
       // await getBills({});
 
-      console.log(responseSearch);
+      this.bills = responseSearch.data.data;
 
       // const bills_query = await firebase
       //   .firestore()

@@ -25,8 +25,12 @@
           <v-switch v-model="permissions.courses"></v-switch>
         </div>
         <div class="d-flex justify-space-between align-center">
-          <span class="text-h5">Pagos</span>
-          <v-switch v-model="permissions.payments"></v-switch>
+          <span class="text-h5">Pagos Estudiantes</span>
+          <v-switch v-model="permissions.paymentsStudents"></v-switch>
+        </div>
+        <div class="d-flex justify-space-between align-center">
+          <span class="text-h5">Pagos Externos</span>
+          <v-switch v-model="permissions.paymentsExternal"></v-switch>
         </div>
         <div class="d-flex justify-space-between align-center">
           <span class="text-h5">Llamados</span>
@@ -63,7 +67,8 @@ export default {
         admin: false,
         users: false,
         courses: false,
-        payments: false,
+        paymentsStudents: false,
+        paymentsExternal: false,
         call: false,
         notes: false,
       },

@@ -21,8 +21,15 @@
         <thead>
           <tr>
             <th class="text-left">Usuario</th>
-            <th class="text-left">Fecha</th>
             <th class="text-left">Descripción</th>
+            <th class="text-left">Fecha</th>
+            <th class="text-left">Proyecto</th>
+            <th class="text-left">Director</th>
+            <th class="text-left">Sala</th>
+            <th class="text-left">Fecha de Grabación</th>
+            <th class="text-left">Loops</th>
+            <th class="text-left">Tiempo de Grabación</th>
+            <th class="text-left">Horario</th>
             <th class="text-left"></th>
           </tr>
         </thead>
@@ -40,8 +47,16 @@
               }}
             </th>
 
-            <th class="text-left">{{ call.date }}</th>
             <th class="text-left">{{ call.description }}</th>
+            <th class="text-left">{{ call.date }}</th>
+            <th class="text-left">{{ call.project }}</th>
+            <th class="text-left">{{ call.director }}</th>
+            <th class="text-left">{{ call.room }}</th>
+            <th class="text-left">{{ call.recordDate }}</th>
+            <th class="text-left">{{ call.loops }}</th>
+            <th class="text-left">{{ call.recordTime }}</th>
+            <th class="text-left">{{ call.schedule }}</th>
+
             <th class="text-left">
               <v-btn @click="deleteItem(call.id)" color="primary"
                 ><v-icon>delete</v-icon></v-btn
@@ -109,8 +124,8 @@ export default {
         .firestore()
         .collection("calls")
         .orderBy("createdAt", "desc")
-        .limit(this.limit)
         .startAfter(this.offset + 1)
+        .limit(this.limit)
 
         .get();
       var calls = [];
@@ -132,6 +147,7 @@ export default {
       const calls_query = await firebase
         .firestore()
         .collection("calls")
+        .orderBy("createdAt", "desc")
         .limit(this.limit)
         .get();
       var calls = [];

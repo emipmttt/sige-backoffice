@@ -28,7 +28,7 @@
 
 <script>
 import md5 from "blueimp-md5";
-
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -36,7 +36,11 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      addBills: "bills/addBills",
+    }),
     get_files(file) {
+      if (!file) return;
       var v = this;
       var reader = new FileReader();
       this.loading = true;
@@ -88,11 +92,18 @@ export default {
               description: `Proyecto: ${obj["PROYECTO"]} | Personaje: ${obj["PERSONAJE"]} - Fecha de Grabación: ${obj["FECHA DE GRABACION"]} `,
               date: obj["FECHA DE PROCESO DE PAGO"],
               createdAt: Date.now(),
+              csvUniqueId: md5(
+                obj["NOMBRE DEL ACTOR"] +
+                  `Proyecto: ${obj["PROYECTO"]} | Personaje: ${obj["PERSONAJE"]} - Fecha de Grabación: ${obj["FECHA DE GRABACION"]} `
+              ),
             });
           }
         }
 
+        await this.addBills(payments);
+
         v.$emit("getBills");
+
         return alert("Pagos Actualizados");
       } catch (error) {
         return alert("Ha ocurrido un error al actualizar los pagos");
