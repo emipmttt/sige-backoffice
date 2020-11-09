@@ -26,6 +26,8 @@
           label="Usuario"
         ></v-autocomplete>
 
+        <v-text-field outline v-model=""></v-text-field>
+
         <v-text-field v-model="description" label="Descripción"></v-text-field>
         <v-dialog
           ref="dialog"

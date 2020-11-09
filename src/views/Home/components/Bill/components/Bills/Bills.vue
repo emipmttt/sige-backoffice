@@ -3,7 +3,6 @@
     <div class="d-flex align-center mb-6">
       <!-- <v-autocomplete
         :items="usersAutocomplete"
-        
       ></v-autocomplete> -->
 
       <v-text-field

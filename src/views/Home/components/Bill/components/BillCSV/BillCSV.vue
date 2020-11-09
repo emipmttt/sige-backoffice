@@ -28,7 +28,6 @@
 
 <script>
 import md5 from "blueimp-md5";
-import firebase from "@/config/firebase";
 
 export default {
   data() {
@@ -66,9 +65,8 @@ export default {
       }
 
       try {
+        var payments = [];
         for (const rowItem of rows) {
-          var batch = firebase.firestore().batch();
-
           for (const col of rowItem) {
             var data = col.split(",");
             if (!data[0]) continue;
@@ -83,11 +81,7 @@ export default {
 
             id = md5(id);
 
-            var paymentRef = firebase
-              .firestore()
-              .collection("payments")
-              .doc(id);
-            batch.set(paymentRef, {
+            payments.push({
               name: obj["NOMBRE DEL ACTOR"],
               user: md5(obj["NOMBRE DEL ACTOR"]),
               amount: obj["TOTAL"],
@@ -96,8 +90,8 @@ export default {
               createdAt: Date.now(),
             });
           }
-          await batch.commit();
         }
+
         v.$emit("getBills");
         return alert("Pagos Actualizados");
       } catch (error) {

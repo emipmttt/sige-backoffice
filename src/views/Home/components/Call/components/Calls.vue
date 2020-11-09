@@ -4,6 +4,18 @@
       {{ calls }}
    </pre
     > -->
+
+    <v-text-field
+      v-model="search"
+      dense
+      dark
+      outlined
+      filled
+      hide-details
+      label="Busqueda"
+      class="mr-2"
+    ></v-text-field>
+
     <v-simple-table class="secondary--bg" dark>
       <template v-slot:default>
         <thead>
@@ -15,14 +27,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(call, index) in calls" :key="call.id + index">
+          <tr v-for="(call, index) in calls_filtered" :key="call.id + index">
             <th class="text-left">
               {{
                 find_user(call.user)
                   ? find_user(call.user).user.name +
                     " " +
-                    find_user(call.user).user.lastname1
-                  : call.name
+                    (find_user(call.user).user.lastname1
+                      ? find_user(call.user).user.lastname1
+                      : "")
+                  : ""
               }}
             </th>
 
@@ -58,11 +72,33 @@ export default {
       calls: [],
       limit: 20,
       offset: 20,
+      search: "",
     };
   },
   computed: {
     ...mapState(["users"]),
+
+    calls_filtered() {
+      var v = this;
+      return this.calls.filter((call) => {
+        if (this.search) {
+          if (
+            v.find_user(call.user) &&
+            v
+              .find_user(call.user)
+              .user.name.toLowerCase()
+              .includes(v.search.toLowerCase())
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        return true;
+      });
+    },
   },
+
   methods: {
     async deleteItem(id) {
       await firebase.firestore().collection("calls").doc(id).delete();
