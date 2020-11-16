@@ -58,8 +58,8 @@
             <th class="text-left">{{ call.schedule }}</th>
 
             <th class="text-left">
-              <v-btn @click="deleteItem(call.id)" color="primary"
-                ><v-icon>delete</v-icon></v-btn
+              <v-btn @click="deleteItem(call.id)" color="primary">
+                <v-icon>delete</v-icon></v-btn
               >
             </th>
           </tr>

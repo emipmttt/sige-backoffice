@@ -116,7 +116,6 @@ export default {
   async created() {
     await this.get_users();
     await this.get_courses();
-    console.log(this.user);
   },
 };
 </script>

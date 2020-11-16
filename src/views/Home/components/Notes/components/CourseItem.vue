@@ -125,7 +125,6 @@ export default {
   },
   watch: {
     isMyCourse(value) {
-      console.log(value);
       if (value) this.$emit("show");
     },
   },

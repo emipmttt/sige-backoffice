@@ -96,6 +96,7 @@ export default {
                 obj["NOMBRE DEL ACTOR"] +
                   `Proyecto: ${obj["PROYECTO"]} | Personaje: ${obj["PERSONAJE"]} - Fecha de Grabación: ${obj["FECHA DE GRABACION"]} `
               ),
+              type: "external",
             });
           }
         }

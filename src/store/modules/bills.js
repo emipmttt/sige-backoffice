@@ -13,6 +13,16 @@ export default {
       return createBillsResponse
 
     },
+    // eslint-disable-next-line no-empty-pattern
+    async deleteBills({}, id) {
+
+      const createBillsResponse = await api.post("/bills/delete", {
+        id
+      })
+
+      return createBillsResponse
+
+    },
 
     // eslint-disable-next-line no-empty-pattern
     async getBills({}, query) {
@@ -24,10 +34,14 @@ export default {
     },
 
     // eslint-disable-next-line no-empty-pattern
-    async searchBills({}, text) {
+    async searchBills({}, {
+      text,
+      type
+    }) {
 
       const searchBillsResponse = await api.post("/bills/search", {
-        text
+        text,
+        type
       })
 
       return searchBillsResponse;
