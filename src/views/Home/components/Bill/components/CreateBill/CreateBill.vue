@@ -111,6 +111,7 @@ export default {
         const response = await this.addBills([
           {
             user: this.user,
+            email: userObject.user.email,
             name: `${userObject.user.name} ${userObject.user.lastname1 || ""}`,
             amount: this.amount,
             description: this.description,

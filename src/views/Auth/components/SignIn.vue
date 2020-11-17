@@ -72,7 +72,9 @@ export default {
             .doc(user.user.uid)
             .get()
             .then((response) => {
-              if (
+              if (!response.data().confirmed) {
+                alert("confirma tu correo para continuar");
+              } else if (
                 response.data().permissions &&
                 response.data().permissions.admin
               ) {
