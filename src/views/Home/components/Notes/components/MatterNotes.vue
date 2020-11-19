@@ -123,6 +123,7 @@ export default {
           matter: arrayElement,
           user: student.id,
           ...sortElements[arrayElement],
+          course: this.group.course,
         };
 
         await firebase
