@@ -20,7 +20,7 @@
       <v-card-text>
         <v-autocomplete
           :disabled="loading"
-          v-model="user"
+          v-model="userSelected"
           :items="users_list"
           :search-input.sync="search_user"
           prepend-icon="person"
@@ -126,7 +126,7 @@ export default {
     return {
       search_user: "",
 
-      user: "",
+      userSelected: "",
       description: "",
       date: "",
       project: "",
@@ -142,7 +142,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["users"]),
+    ...mapState(["users", "user"]),
     users_list() {
       return this.users.map((user) => ({
         text: `${user.user.name} ${user.user.lastname1 || ""}`,
@@ -157,7 +157,7 @@ export default {
 
       try {
         var data = {
-          user: this.user,
+          user: this.userSelected,
           description: this.description,
           date: this.date,
 
@@ -169,17 +169,19 @@ export default {
           schedule: this.schedule,
 
           createdAt: Date.now(),
+          createdBy: this.user.id,
+          createdByEmail: this.user.user.email,
         };
-
+        console.log(this.user);
         await firebase.firestore().collection("calls").add(data);
 
         const user = this.users.find((user) => {
-          return user.id == this.user;
+          return user.id == this.userSelected;
         });
 
         await api.post("/mail/call", { email: user.user.email, data });
 
-        this.user = "null";
+        this.userSelected = "null";
         this.description = "";
         this.date = "";
         this.project = "";

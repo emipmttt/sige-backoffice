@@ -43,7 +43,6 @@
                   label="Calificación"
                   dense
                   outlined
-                  type="number"
                 ></v-text-field>
                 <v-text-field
                   hide-details
