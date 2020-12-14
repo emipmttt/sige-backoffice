@@ -74,6 +74,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-btn @click="deleteGroup" class="secondary--bg ml-2">
+        <v-icon>delete</v-icon>
+      </v-btn>
     </td>
   </tr>
 </template>
@@ -83,6 +86,7 @@ import firebase from "@/config/firebase";
 export default {
   props: {
     group: Object,
+    course: String,
   },
   data() {
     return {
@@ -105,9 +109,21 @@ export default {
       await firebase.firestore().collection("matters").doc(id).delete();
       await this.get_matters();
     },
+
+    async deleteGroup() {
+      await firebase
+        .firestore()
+        .collection("groups")
+        .doc(this.group.id)
+        .delete();
+
+      this.$emit("getGroups");
+    },
+
     async createMatter() {
       await firebase.firestore().collection("matters").add({
         group: this.group.id,
+        course: this.course,
         name: this.matterName,
         teacher: this.teacherSelected,
       });
@@ -165,6 +181,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>  

@@ -3,7 +3,11 @@
     <h1 class="text-h6">Pagos</h1>
     <form class="d-flex align-center" @submit.prevent="create_bill">
       <div class="pa-1">
-        <v-text-field v-model="amount" label="Monto" type="number"></v-text-field>
+        <v-text-field
+          v-model="amount"
+          label="Monto"
+          type="number"
+        ></v-text-field>
       </div>
       <div class="pa-1">
         <v-dialog
@@ -25,8 +29,12 @@
           </template>
           <v-date-picker v-model="date" scrollable>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="date_modal = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+            <v-btn text color="primary" @click="date_modal = false">
+              Cancelar
+            </v-btn>
+            <v-btn text color="primary" @click="$refs.dialog.save(date)">
+              OK
+            </v-btn>
           </v-date-picker>
         </v-dialog>
       </div>
@@ -36,8 +44,8 @@
       </div>
     </form>
     <v-row v-for="(bill, index) in bills_course" :key="index">
-      <v-col>{{bill.amount}}</v-col>
-      <v-col>{{bill.date}}</v-col>
+      <v-col>{{ bill.amount }}</v-col>
+      <v-col>{{ bill.date }}</v-col>
       <v-col>
         <v-btn @click="delete_bill(index)">
           <v-icon>delete</v-icon>

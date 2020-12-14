@@ -43,7 +43,6 @@
                   label="Calificación"
                   dense
                   outlined
-                  type="number"
                 ></v-text-field>
                 <v-text-field
                   hide-details
@@ -123,6 +122,7 @@ export default {
           matter: arrayElement,
           user: student.id,
           ...sortElements[arrayElement],
+          course: this.group.course,
         };
 
         await firebase

@@ -19,7 +19,8 @@
       <v-card-title class="headline secondary--bg">Crear llamado.</v-card-title>
       <v-card-text>
         <v-autocomplete
-          v-model="user"
+          :disabled="loading"
+          v-model="userSelected"
           :items="users_list"
           :search-input.sync="search_user"
           prepend-icon="person"
@@ -27,44 +28,53 @@
         ></v-autocomplete>
 
         <v-text-field
+          :disabled="loading"
           label="Proyecto"
           dense
           outline
           v-model="project"
         ></v-text-field>
         <v-text-field
+          :disabled="loading"
           label="Director"
           dense
           outline
           v-model="director"
         ></v-text-field>
-        <v-text-field label="Sala" dense outline v-model="room"></v-text-field>
         <v-text-field
-          label="Fecha de Grabación"
+          :disabled="loading"
+          label="Sala"
           dense
           outline
-          v-model="recordDate"
+          v-model="room"
         ></v-text-field>
         <v-text-field
-          label="Loops"
-          dense
-          outline
-          v-model="loops"
-        ></v-text-field>
-        <v-text-field
+          :disabled="loading"
           label="Tiempo de Grabación"
           dense
           outline
           v-model="recordTime"
         ></v-text-field>
         <v-text-field
+          :disabled="loading"
+          label="Loops"
+          dense
+          outline
+          v-model="loops"
+        ></v-text-field>
+        <v-text-field
+          :disabled="loading"
           label="Horario"
           dense
           outline
           v-model="schedule"
         ></v-text-field>
 
-        <v-text-field v-model="description" label="Descripción"></v-text-field>
+        <v-text-field
+          :disabled="loading"
+          v-model="description"
+          label="Descripción"
+        ></v-text-field>
         <v-dialog
           ref="dialog"
           v-model="date_modal"
@@ -74,8 +84,9 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
+              :disabled="loading"
               v-model="date"
-              label="Fecha"
+              label="Fecha de grabación"
               prepend-icon="event"
               readonly
               v-bind="attrs"
@@ -85,7 +96,7 @@
           <v-date-picker v-model="date" scrollable>
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="date_modal = false"
-              >Cancel</v-btn
+              >Cancelar</v-btn
             >
             <v-btn text color="primary" @click="$refs.dialog.save(date)"
               >OK</v-btn
@@ -97,7 +108,9 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn class="red" text @click="create">Añadir Llamado</v-btn>
+        <v-btn :disabled="loading" class="red" text @click="create"
+          >Añadir Llamado</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -105,6 +118,7 @@
 
 <script>
 import firebase from "@/config/firebase";
+import api from "@/services/api.js";
 import { mapState } from "vuex";
 
 export default {
@@ -112,23 +126,23 @@ export default {
     return {
       search_user: "",
 
-      user: "",
+      userSelected: "",
       description: "",
       date: "",
       project: "",
       director: "",
       room: "",
-      recordDate: "",
       loops: "",
       recordTime: "",
       schedule: "",
 
       create_call: false,
       date_modal: false,
+      loading: false,
     };
   },
   computed: {
-    ...mapState(["users"]),
+    ...mapState(["users", "user"]),
     users_list() {
       return this.users.map((user) => ({
         text: `${user.user.name} ${user.user.lastname1 || ""}`,
@@ -138,34 +152,54 @@ export default {
   },
   methods: {
     async create() {
+      if (this.loading) return;
+      this.loading = true;
+
       try {
-        await firebase.firestore().collection("calls").add({
-          user: this.user,
+        var data = {
+          user: this.userSelected,
           description: this.description,
           date: this.date,
 
           project: this.project,
           director: this.director,
           room: this.room,
-          recordDate: this.recordDate,
           loops: this.loops,
           recordTime: this.recordTime,
           schedule: this.schedule,
 
           createdAt: Date.now(),
+          createdBy: this.user.id,
+          createdByEmail: this.user.user.email,
+        };
+        console.log(this.user);
+        await firebase.firestore().collection("calls").add(data);
+
+        const user = this.users.find((user) => {
+          return user.id == this.userSelected;
         });
 
-        this.user = "null";
+        await api.post("/mail/call", { email: user.user.email, data });
+
+        this.userSelected = "null";
         this.description = "";
         this.date = "";
+        this.project = "";
+        this.director = "";
+        this.room = "";
+        this.loops = "";
+        this.recordTime = "";
+        this.schedule = "";
 
         alert("Creado Correctamente");
         this.$emit("getCalls");
 
         this.create_call = false;
+        this.loading = false;
       } catch (error) {
         alert(error);
         console.error(error);
+        this.loading = false;
       }
     },
   },

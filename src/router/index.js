@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import Auth from '../views/Auth/Auth.vue'
 import SignIn from '../views/Auth/components/SignIn.vue'
 import SignUp from '../views/Auth/components/SignUp.vue'
+import Confirm from '../views/Auth/components/Confirm.vue'
 
 // home
 import Home from "../views/Home/Home.vue"
@@ -21,6 +22,10 @@ Vue.use(VueRouter)
 const routes = [{
     path: "/politica-de-privacidad",
     component: Privacy
+  },
+  {
+    path: "/confirm/:uid",
+    component: Confirm
   },
   {
     path: '/',

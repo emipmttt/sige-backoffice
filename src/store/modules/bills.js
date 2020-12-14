@@ -1,4 +1,4 @@
-import api from "../../sevices/api"
+import api from "../../services/api"
 export default {
   namespaced: true,
   state: {},

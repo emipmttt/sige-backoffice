@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const apiPath = "https://sige-produciendo.herokuapp.com/";
+export const apiPath = process.env.VUE_APP_API;
 
 const config = new axios.create({
   baseURL: apiPath,

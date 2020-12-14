@@ -56,8 +56,7 @@ export default {
         const groupFind = this.groups.find((groupObjectFind) => {
           return groupObjectFind.id == group;
         });
-
-        course = groupFind.course;
+        if (groupFind) course = groupFind.course;
       });
 
       return course == this.course.id;

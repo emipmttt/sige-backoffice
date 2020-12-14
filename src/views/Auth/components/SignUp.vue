@@ -61,14 +61,15 @@
       block
       class="white--text mt-10"
       text
-      >Aviso de Privacidad</v-btn
     >
+      Aviso de Privacidad
+    </v-btn>
   </form>
 </template>
 
 <script>
 import firebase from "@/config/firebase";
-// import api from "../../../sevices/api";
+import api from "@/services/api";
 export default {
   data() {
     return {
@@ -118,12 +119,22 @@ export default {
               active: false,
               created_at: Date.now(),
             })
-            .then(() => {
+            .then(async () => {
               v.loading = false;
 
-              // api.post("/mail/")
+              await api.post("/mail/confirm-account", {
+                email: this.email,
+                uid: user.user.uid,
+              });
+              await api.post("/mail/new-user", {
+                email: this.email,
+                name: this.name,
+                uid: user.user.uid,
+                type: "admin",
+              });
+
               alert(
-                "Te has registrado correctamente, contacta a un administrador para activar tu cuenta"
+                "Te has registrado correctamente, enviamos un correo para que puedas confirmar tu cuenta"
               );
 
               v.$router.push("/iniciar-sesion");

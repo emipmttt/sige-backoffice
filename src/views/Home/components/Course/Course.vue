@@ -24,7 +24,13 @@
             </tr>
           </thead>
           <tbody>
-            <GroupItem v-for="group in groups" :key="group.id" :group="group" />
+            <GroupItem
+              v-for="group in groups"
+              :key="group.id"
+              :group="group"
+              :course="$route.params.courseId"
+              @getGroups="getGroups"
+            />
           </tbody>
         </template>
       </v-simple-table>

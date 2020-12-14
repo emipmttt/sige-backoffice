@@ -15,7 +15,7 @@
       <v-switch color="primary" v-model="active"></v-switch>
     </td>
     <td>
-      <v-icon color="green" v-if="user.confirmed">check</v-icon>
+      <v-icon color="primary" v-if="user.confirmed">check</v-icon>
       <v-icon v-else>close</v-icon>
     </td>
     <td>

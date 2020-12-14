@@ -65,7 +65,8 @@
       @click="showMore"
       v-if="bills.length % 2 == 0"
       block
-      color="red"
+      text
+      color="primary"
       class="white--text"
       >Mostrar Más</v-btn
     >
