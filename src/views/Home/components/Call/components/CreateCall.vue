@@ -26,7 +26,43 @@
           label="Usuario"
         ></v-autocomplete>
 
-        <v-text-field outline v-model=""></v-text-field>
+        <v-text-field
+          label="Proyecto"
+          dense
+          outline
+          v-model="project"
+        ></v-text-field>
+        <v-text-field
+          label="Director"
+          dense
+          outline
+          v-model="director"
+        ></v-text-field>
+        <v-text-field label="Sala" dense outline v-model="room"></v-text-field>
+        <v-text-field
+          label="Fecha de Grabación"
+          dense
+          outline
+          v-model="recordDate"
+        ></v-text-field>
+        <v-text-field
+          label="Loops"
+          dense
+          outline
+          v-model="loops"
+        ></v-text-field>
+        <v-text-field
+          label="Tiempo de Grabación"
+          dense
+          outline
+          v-model="recordTime"
+        ></v-text-field>
+        <v-text-field
+          label="Horario"
+          dense
+          outline
+          v-model="schedule"
+        ></v-text-field>
 
         <v-text-field v-model="description" label="Descripción"></v-text-field>
         <v-dialog
@@ -77,8 +113,15 @@ export default {
       search_user: "",
 
       user: "",
-      date: "",
       description: "",
+      date: "",
+      project: "",
+      director: "",
+      room: "",
+      recordDate: "",
+      loops: "",
+      recordTime: "",
+      schedule: "",
 
       create_call: false,
       date_modal: false,
@@ -100,6 +143,15 @@ export default {
           user: this.user,
           description: this.description,
           date: this.date,
+
+          project: this.project,
+          director: this.director,
+          room: this.room,
+          recordDate: this.recordDate,
+          loops: this.loops,
+          recordTime: this.recordTime,
+          schedule: this.schedule,
+
           createdAt: Date.now(),
         });
 

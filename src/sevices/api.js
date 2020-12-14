@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const apiPath = "http://localhost:3000";
+export const apiPath = "https://sige-produciendo.herokuapp.com/";
 
 const config = new axios.create({
   baseURL: apiPath,

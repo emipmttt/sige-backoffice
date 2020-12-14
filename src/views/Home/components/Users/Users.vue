@@ -16,6 +16,7 @@
             <th class="text-left">Correo Electrónico</th>
             <th class="text-left">Tipo</th>
             <th class="text-left">Activo</th>
+            <th class="text-left">Confirmado</th>
             <th class="text-left"></th>
           </tr>
         </thead>
@@ -43,7 +44,6 @@ export default {
   computed: {
     users_filtered() {
       return this.users.filter((user) => {
-        console.log(user);
         if (
           (user.user.name &&
             user.user.name.toLowerCase().includes(this.search.toLowerCase())) ||

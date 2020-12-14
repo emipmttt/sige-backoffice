@@ -1,10 +1,14 @@
 <template>
   <div class="pa-2">
-    <h1 class="white--text">Pagos Estudiantes</h1>
-    <BillCSV @getBills="getBills" />
+    <h1 class="white--text">Pagos {{ billType }}</h1>
+    <BillCSV
+      :billType="billType"
+      v-if="billType == 'externos'"
+      @getBills="getBills"
+    />
     <br />
-    <CreateBill @getBills="getBills" />
-    <Bills v-if="bills" />
+    <CreateBill :billType="billType" @getBills="getBills" />
+    <Bills :billType="billType" v-if="bills" />
   </div>
 </template>
 
@@ -24,6 +28,11 @@ export default {
   data() {
     return { bills: true };
   },
+  computed: {
+    billType() {
+      return this.$route.path.split("pagos-")[1];
+    },
+  },
   methods: {
     ...mapActions(["get_users"]),
     getBills() {
@@ -34,11 +43,15 @@ export default {
       }, 500);
     },
   },
+
   created() {
     this.get_users();
   },
 };
 </script>
 
-<style>
+<style scoped>
+h1 {
+  text-transform: capitalize;
+}
 </style>

@@ -56,8 +56,6 @@ export default {
         });
       });
       this.teachers = teachers;
-
-      console.log(this.teachers);
     },
   },
   async mounted() {

@@ -15,6 +15,10 @@
       <v-switch color="primary" v-model="active"></v-switch>
     </td>
     <td>
+      <v-icon color="green" v-if="user.confirmed">check</v-icon>
+      <v-icon v-else>close</v-icon>
+    </td>
+    <td>
       <v-dialog v-model="dialog" scrollable dark width="500">
         <template v-slot:activator="{ on, attrs }">
           <v-btn text dark v-bind="attrs" v-on="on" class="primary--text">

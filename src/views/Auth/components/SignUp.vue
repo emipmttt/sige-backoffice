@@ -68,7 +68,7 @@
 
 <script>
 import firebase from "@/config/firebase";
-
+// import api from "../../../sevices/api";
 export default {
   data() {
     return {
@@ -120,9 +120,12 @@ export default {
             })
             .then(() => {
               v.loading = false;
+
+              // api.post("/mail/")
               alert(
                 "Te has registrado correctamente, contacta a un administrador para activar tu cuenta"
               );
+
               v.$router.push("/iniciar-sesion");
             })
             .catch(() => {

@@ -76,6 +76,9 @@
 import { mapActions, mapState } from "vuex";
 
 export default {
+  props: {
+    billType: String,
+  },
   data() {
     return {
       search_user: "",
@@ -104,13 +107,16 @@ export default {
     }),
     async create() {
       try {
+        const userObject = this.users.find((user) => user.id == this.user);
         const response = await this.addBills([
           {
             user: this.user,
+            name: `${userObject.user.name} ${userObject.user.lastname1 || ""}`,
             amount: this.amount,
             description: this.description,
             date: this.date,
             createdAt: Date.now(),
+            type: this.billType == "estudiantes" ? "student" : "external",
           },
         ]);
 
