@@ -57,6 +57,7 @@
 
 <script>
 import firebase from "@/config/firebase";
+import api from "@/services/api";
 import { mapMutations } from "vuex";
 export default {
   data() {
@@ -105,7 +106,12 @@ export default {
             .then((response) => {
               if (!response.data().confirmed) {
                 alert("confirma tu correo para continuar");
-                this.loading = true;
+                api.post("/mail/confirm-account", {
+                  email: this.email,
+                  uid: user.user.uid,
+                });
+
+                this.loading = false;
               } else if (
                 response.data().permissions &&
                 response.data().permissions.admin
@@ -125,7 +131,7 @@ export default {
                   alert(
                     "Tu cuenta no está activa, contacta a un administrador para activarla"
                   );
-                  this.loading = true;
+                  this.loading = false;
                 }
               } else {
                 v.loading = false;
