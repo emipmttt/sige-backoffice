@@ -7,6 +7,7 @@
       color="white"
       dark
       label="Correo Electrónico"
+      :disabled="loading"
       dense
       outlined
     ></v-text-field>
@@ -16,23 +17,35 @@
       dark
       label="Contraseña"
       type="password"
+      :disabled="loading"
       dense
       outlined
     ></v-text-field>
-    <v-btn type="submit" block class="mt-2 primary--bg white--text"
+    <v-btn
+      :disabled="loading"
+      type="submit"
+      block
+      class="mt-2 primary--bg white--text"
       >Iniciar Sesión</v-btn
     >
     <v-btn
       @click="$router.push('/registrate')"
       block
+      :disabled="loading"
       class="mt-2 white--text"
       text
       >Regístrate</v-btn
     >
-    <v-btn @click="recoverPassword" block class="mt-2 white--text" text
+    <v-btn
+      :disabled="loading"
+      @click="recoverPassword"
+      block
+      class="mt-2 white--text"
+      text
       >¿Olvidaste tu contraseña?</v-btn
     >
     <v-btn
+      :disabled="loading"
       @click="$router.push('/politica-de-privacidad')"
       block
       class="white--text mt-10"
@@ -68,7 +81,7 @@ export default {
         .auth()
         .sendPasswordResetEmail(emailAddress)
         .then(function () {
-          alert("hemos enviado un correo para recuperar tu contraseñaF.");
+          alert("hemos enviado un correo para recuperar tu contraseña.");
         });
     },
     sing_in() {
@@ -92,6 +105,7 @@ export default {
             .then((response) => {
               if (!response.data().confirmed) {
                 alert("confirma tu correo para continuar");
+                this.loading = true;
               } else if (
                 response.data().permissions &&
                 response.data().permissions.admin
@@ -111,6 +125,7 @@ export default {
                   alert(
                     "Tu cuenta no está activa, contacta a un administrador para activarla"
                   );
+                  this.loading = true;
                 }
               } else {
                 v.loading = false;

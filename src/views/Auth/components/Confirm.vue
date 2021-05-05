@@ -4,6 +4,7 @@
 
 <script>
 import firebase from "@/config/firebase";
+
 export default {
   methods: {
     async confirm() {
