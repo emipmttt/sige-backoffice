@@ -29,7 +29,9 @@
       text
       >Regístrate</v-btn
     >
-    <v-btn block class="mt-2 white--text" text>¿Olvidaste tu contraseña?</v-btn>
+    <v-btn @click="recoverPassword" block class="mt-2 white--text" text
+      >¿Olvidaste tu contraseña?</v-btn
+    >
     <v-btn
       @click="$router.push('/politica-de-privacidad')"
       block
@@ -53,6 +55,22 @@ export default {
   },
   methods: {
     ...mapMutations(["update_state"]),
+    recoverPassword() {
+      var emailAddress = prompt("Escribe tu dirección de correo electrónico");
+
+      if (!emailAddress) {
+        return alert(
+          "Escribe la dirección de correo electrónico con la que registraste tu cuenta."
+        );
+      }
+
+      firebase
+        .auth()
+        .sendPasswordResetEmail(emailAddress)
+        .then(function () {
+          alert("hemos enviado un correo para recuperar tu contraseñaF.");
+        });
+    },
     sing_in() {
       if (this.loading) return;
       this.loading = true;

@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="sign_up">
-    <h2 class="white--text">Iniciar Sesión</h2>
+    <h2 class="white--text">Regístrate</h2>
     <br />
     <v-text-field
       :disabled="loading"
@@ -55,7 +55,6 @@
       text
       >Iniciar Sesión</v-btn
     >
-    <v-btn block class="mt-2 white--text" text>¿Olvidaste tu contraseña?</v-btn>
     <v-btn
       @click="$router.push('/politica-de-privacidad')"
       block
@@ -126,6 +125,7 @@ export default {
                 email: this.email,
                 uid: user.user.uid,
               });
+
               await api.post("/mail/new-user", {
                 email: this.email,
                 name: this.name,
