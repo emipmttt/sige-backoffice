@@ -44,7 +44,7 @@
                   dense
                   outlined
                 ></v-text-field>
-                <v-text-field
+                <v-textarea
                   hide-details
                   :data-student="student.id"
                   :data-matter="matter.id"
@@ -53,7 +53,7 @@
                   dense
                   outlined
                   type="test"
-                ></v-text-field>
+                ></v-textarea>
               </td>
               <td style="text-align: right">
                 <v-btn color="primary" @click="saveNote(student)">

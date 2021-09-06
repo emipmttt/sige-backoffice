@@ -39,22 +39,17 @@
           <tr v-for="(bill, index) in bills" :key="bill._id + index">
             <!-- <th class="text-left">{{ bill.id }}</th> -->
             <th class="text-left">
-              {{
-                find_user(bill.user)
-                  ? find_user(bill.user).user.name +
-                    " " +
-                    find_user(bill.user).user.lastname1
-                  : bill.name
-              }}
+              {{ userName(bill) }}
             </th>
 
             <th class="text-left">{{ bill.amount }}</th>
             <th class="text-left">{{ bill.date }}</th>
             <th class="text-left">{{ bill.description }}</th>
             <th class="text-left">
+              <CreateBill :editData="bill" @getBills="updateBills" />
               <v-btn @click="deleteItem(bill._id)" color="primary"
-                ><v-icon>delete</v-icon></v-btn
-              >
+                ><v-icon>delete</v-icon>
+              </v-btn>
             </th>
           </tr>
         </tbody>
@@ -75,7 +70,9 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import CreateBill from "../CreateBill/CreateBill.vue";
 export default {
+  components: { CreateBill },
   props: {
     billType: String,
   },
@@ -109,6 +106,21 @@ export default {
       deleteBills: "bills/deleteBills",
       searchBillsAction: "bills/searchBills",
     }),
+    userName(bill) {
+      const findingUser = this.find_user(bill.user);
+
+      if (findingUser) {
+        const firstName = findingUser.user.name;
+        const lastName = findingUser.user.lastname1;
+
+        return `${firstName} ${lastName || ""}`;
+      } else {
+        return bill.name;
+      }
+    },
+    updateBills() {
+      this.$emit("getBills");
+    },
     async searchBills() {
       this.search = true;
       const responseSearch = await this.searchBillsAction({

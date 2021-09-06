@@ -8,8 +8,10 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@ionic-native/status-bar": "^5.36.0",
     "axios": "^0.21.0",
     "blueimp-md5": "^2.18.0",
+    "cordova-plugin-statusbar": "^2.4.3",
     "core-js": "^3.6.5",
     "firebase": "^7.19.1",
     "uuid": "^8.3.0",

@@ -22,11 +22,10 @@
           <tr>
             <th class="text-left">Usuario</th>
             <th class="text-left">Descripción</th>
-            <th class="text-left">Fecha</th>
+            <th class="text-left">Fecha de Grabación</th>
             <th class="text-left">Proyecto</th>
             <th class="text-left">Director</th>
             <th class="text-left">Sala</th>
-            <th class="text-left">Fecha de Grabación</th>
             <th class="text-left">Loops</th>
             <th class="text-left">Tiempo de Grabación</th>
             <th class="text-left">Horario</th>
@@ -52,12 +51,13 @@
             <th class="text-left">{{ call.project }}</th>
             <th class="text-left">{{ call.director }}</th>
             <th class="text-left">{{ call.room }}</th>
-            <th class="text-left">{{ call.recordDate }}</th>
             <th class="text-left">{{ call.loops }}</th>
             <th class="text-left">{{ call.recordTime }}</th>
             <th class="text-left">{{ call.schedule }}</th>
 
             <th class="text-left">
+              <CreateCall :editData="call" class="mr-2" />
+
               <v-btn @click="deleteItem(call.id)" color="primary">
                 <v-icon>delete</v-icon></v-btn
               >
@@ -73,15 +73,20 @@
       block
       color="red"
       class="white--text"
-      >Mostrar Más</v-btn
     >
+      Mostrar Más
+    </v-btn>
   </div>
 </template>
 
 <script>
 import firebase from "@/config/firebase";
 import { mapState } from "vuex";
+import CreateCall from "./CreateCall.vue";
 export default {
+  components: {
+    CreateCall,
+  },
   data() {
     return {
       calls: [],

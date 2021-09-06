@@ -8,7 +8,7 @@
     />
     <br />
     <CreateBill :billType="billType" @getBills="getBills" />
-    <Bills :billType="billType" v-if="bills" />
+    <Bills v-if="bills" :billType="billType" @getBills="getBills" />
   </div>
 </template>
 
@@ -38,6 +38,7 @@ export default {
     getBills() {
       this.bills = false;
       var v = this;
+      console.log("lde");
       setTimeout(() => {
         v.bills = true;
       }, 500);

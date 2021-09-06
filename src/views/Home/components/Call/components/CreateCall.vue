@@ -1,119 +1,127 @@
 <template>
-  <v-dialog v-model="create_call" width="500">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn
-        v-bind="attrs"
-        v-on="on"
-        fixed
-        dark
-        fab
-        right
-        bottom
-        class="primary--bg"
-      >
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
-    </template>
+  <div class="d-inline-block">
+    <v-btn v-if="editData" @click="create_call = true" color="primary">
+      <v-icon>edit</v-icon></v-btn
+    >
 
-    <v-card class="secondary--bg" dark>
-      <v-card-title class="headline secondary--bg">Crear llamado.</v-card-title>
-      <v-card-text>
-        <v-autocomplete
-          :disabled="loading"
-          v-model="userSelected"
-          :items="users_list"
-          :search-input.sync="search_user"
-          prepend-icon="person"
-          label="Usuario"
-        ></v-autocomplete>
-
-        <v-text-field
-          :disabled="loading"
-          label="Proyecto"
-          dense
-          outline
-          v-model="project"
-        ></v-text-field>
-        <v-text-field
-          :disabled="loading"
-          label="Director"
-          dense
-          outline
-          v-model="director"
-        ></v-text-field>
-        <v-text-field
-          :disabled="loading"
-          label="Sala"
-          dense
-          outline
-          v-model="room"
-        ></v-text-field>
-        <v-text-field
-          :disabled="loading"
-          label="Tiempo de Grabación"
-          dense
-          outline
-          v-model="recordTime"
-        ></v-text-field>
-        <v-text-field
-          :disabled="loading"
-          label="Loops"
-          dense
-          outline
-          v-model="loops"
-        ></v-text-field>
-        <v-text-field
-          :disabled="loading"
-          label="Horario"
-          dense
-          outline
-          v-model="schedule"
-        ></v-text-field>
-
-        <v-text-field
-          :disabled="loading"
-          v-model="description"
-          label="Descripción"
-        ></v-text-field>
-        <v-dialog
-          ref="dialog"
-          v-model="date_modal"
-          :return-value.sync="date"
-          persistent
-          width="290px"
+    <v-dialog v-model="create_call" width="500">
+      <template v-if="!editData" v-slot:activator="{ on, attrs }">
+        <v-btn
+          v-bind="attrs"
+          v-on="on"
+          fixed
+          dark
+          fab
+          right
+          bottom
+          class="primary--bg"
         >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              :disabled="loading"
-              v-model="date"
-              label="Fecha de grabación"
-              prepend-icon="event"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker v-model="date" scrollable>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="date_modal = false"
-              >Cancelar</v-btn
-            >
-            <v-btn text color="primary" @click="$refs.dialog.save(date)"
-              >OK</v-btn
-            >
-          </v-date-picker>
-        </v-dialog>
-      </v-card-text>
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </template>
 
-      <v-divider></v-divider>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn :disabled="loading" class="red" text @click="create"
-          >Añadir Llamado</v-btn
+      <v-card class="secondary--bg" dark>
+        <v-card-title class="headline secondary--bg"
+          >Crear llamado.</v-card-title
         >
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+        <v-card-text>
+          <v-autocomplete
+            :disabled="loading"
+            v-model="userSelected"
+            :items="users_list"
+            :search-input.sync="search_user"
+            prepend-icon="person"
+            label="Usuario"
+          ></v-autocomplete>
+
+          <v-text-field
+            :disabled="loading"
+            label="Proyecto"
+            dense
+            outline
+            v-model="project"
+          ></v-text-field>
+          <v-text-field
+            :disabled="loading"
+            label="Director"
+            dense
+            outline
+            v-model="director"
+          ></v-text-field>
+          <v-text-field
+            :disabled="loading"
+            label="Sala"
+            dense
+            outline
+            v-model="room"
+          ></v-text-field>
+          <v-text-field
+            :disabled="loading"
+            label="Tiempo de Grabación"
+            dense
+            outline
+            v-model="recordTime"
+          ></v-text-field>
+          <v-text-field
+            :disabled="loading"
+            label="Loops"
+            dense
+            outline
+            v-model="loops"
+          ></v-text-field>
+          <v-text-field
+            :disabled="loading"
+            label="Horario"
+            dense
+            outline
+            v-model="schedule"
+          ></v-text-field>
+
+          <v-text-field
+            :disabled="loading"
+            v-model="description"
+            label="Descripción"
+          ></v-text-field>
+          <v-dialog
+            ref="dialog"
+            v-model="date_modal"
+            :return-value.sync="date"
+            persistent
+            width="290px"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                :disabled="loading"
+                v-model="date"
+                label="Fecha de grabación"
+                prepend-icon="event"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker v-model="date" scrollable>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="date_modal = false"
+                >Cancelar</v-btn
+              >
+              <v-btn text color="primary" @click="$refs.dialog.save(date)"
+                >OK</v-btn
+              >
+            </v-date-picker>
+          </v-dialog>
+        </v-card-text>
+
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn :disabled="loading" class="red" text @click="create"
+            >Añadir Llamado</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -122,6 +130,9 @@ import api from "@/services/api.js";
 import { mapState } from "vuex";
 
 export default {
+  props: {
+    editData: Object,
+  },
   data() {
     return {
       search_user: "",
@@ -151,6 +162,17 @@ export default {
     },
   },
   methods: {
+    setEditData() {
+      this.userSelected = this.editData.user;
+      this.description = this.editData.description;
+      this.date = this.editData.date;
+      this.project = this.editData.project;
+      this.director = this.editData.director;
+      this.room = this.editData.room;
+      this.loops = this.editData.loops;
+      this.recordTime = this.editData.recordTime;
+      this.schedule = this.editData.schedule;
+    },
     async create() {
       if (this.loading) return;
       this.loading = true;
@@ -172,8 +194,16 @@ export default {
           createdBy: this.user.id,
           createdByEmail: this.user.user.email,
         };
-        console.log(this.user);
-        await firebase.firestore().collection("calls").add(data);
+
+        if (this.editData) {
+          await firebase
+            .firestore()
+            .collection("calls")
+            .doc(this.editData.id)
+            .update(data);
+        } else {
+          await firebase.firestore().collection("calls").add(data);
+        }
 
         const user = this.users.find((user) => {
           return user.id == this.userSelected;
@@ -202,6 +232,9 @@ export default {
         this.loading = false;
       }
     },
+  },
+  mounted() {
+    if (this.editData) this.setEditData();
   },
 };
 </script>

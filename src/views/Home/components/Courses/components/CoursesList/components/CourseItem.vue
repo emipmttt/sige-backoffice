@@ -22,6 +22,10 @@
           <v-card-title class="headline">Editar</v-card-title>
           <v-card-text>
             <v-text-field v-model="course.title" label="Título"></v-text-field>
+            <v-textarea
+              v-model="course.description"
+              label="Descripción"
+            ></v-textarea>
             <v-text-field
               v-model="course.date"
               label="Fecha de inicio"
