@@ -2,25 +2,25 @@
   <div class="pa-2">
     <h1 class="white--text">Grupos</h1>
     <v-card class="secondary--bg pa-4">
-      <div class="d-flex">
+      <form @submit.prevent="createGroup" class="d-flex">
         <v-text-field
           v-model="newGroupName"
           dark
           label="Nuevo Grupo"
           outlined
+          required
           dense
         ></v-text-field>
-        <v-btn @click="createGroup" color="primary" class="ml-2"
-          >Añadir Grupo</v-btn
-        >
-      </div>
+        <v-btn type="submit" color="primary" class="ml-2">Añadir Grupo</v-btn>
+      </form>
 
       <v-simple-table dark class="secondary--bg">
         <template v-slot:default>
           <thead>
             <tr>
               <th class="text-left">Grupo</th>
-              <th class="text-left"></th>
+              <th class="text-left">Materias y Profesores</th>
+              <th class="text-left">Editar Grupo</th>
             </tr>
           </thead>
           <tbody>
@@ -53,13 +53,22 @@ export default {
   },
   methods: {
     async createGroup() {
-      await firebase.firestore().collection("groups").add({
-        course: this.$route.params.courseId,
-        title: this.newGroupName,
-        createdAt: Date.now(),
-      });
+      const name = this.newGroupName.trim();
 
-      await this.getGroups();
+      if (name) {
+        await firebase
+          .firestore()
+          .collection("groups")
+          .add({
+            course: this.$route.params.courseId,
+            title: this.newGroupName,
+            createdAt: Date.now(),
+          });
+
+        await this.getGroups();
+      } else {
+        alert("Escribe un nombre para el grupo");
+      }
     },
     async getGroups() {
       const groupsQuery = await firebase
@@ -84,5 +93,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

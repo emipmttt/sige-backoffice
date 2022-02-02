@@ -40,9 +40,13 @@
                   :data-student="student.id"
                   :data-matter="matter.id"
                   data-type-input="value"
-                  label="Calificación"
+                  label="Calificación ( 0 - 10)"
+                  max="10"
+                  min="0"
                   dense
                   outlined
+                  type="number"
+                  v-model="valuesIndex[`${student.id}_${matter.id}_value`]"
                 ></v-text-field>
                 <v-textarea
                   hide-details
@@ -52,7 +56,9 @@
                   label="Observaciones"
                   dense
                   outlined
-                  type="test"
+                  v-model="
+                    valuesIndex[`${student.id}_${matter.id}_observations`]
+                  "
                 ></v-textarea>
               </td>
               <td style="text-align: right">
@@ -87,6 +93,8 @@ export default {
   data() {
     return {
       dialog: false,
+      // values index works to update ui view from init data
+      valuesIndex: {},
     };
   },
   computed: {
@@ -95,6 +103,38 @@ export default {
     },
   },
   methods: {
+    async getNote() {
+      if (this.students.length > 0 && this.mattersGroup.length > 0) {
+        // cada estudiante
+        this.students.forEach(async (studentItem) => {
+          // cada materia
+          this.mattersGroup.forEach(async (matterItem) => {
+            const data = await firebase
+              .firestore()
+              .collection("notes")
+              .doc(studentItem.id + matterItem.id)
+              .get();
+
+            const note = data.data();
+
+            if (note && note.value && note.observations) {
+              let valuesIndex = { ...this.valuesIndex };
+
+              valuesIndex[`${studentItem.id}_${matterItem.id}_value`] =
+                note.value;
+              valuesIndex[`${studentItem.id}_${matterItem.id}_observations`] =
+                note.observations;
+
+              this.valuesIndex = valuesIndex;
+            }
+          });
+        });
+      } else {
+        setTimeout(() => {
+          this.getNote();
+        }, 500);
+      }
+    },
     async saveNote(student) {
       var elements = document.querySelectorAll(
         `[data-student='${student.id}']`
@@ -135,8 +175,14 @@ export default {
       alert("Calificación actualizada correctamente");
     },
   },
+  watch: {
+    dialog(value) {
+      if (value) {
+        this.getNote();
+      }
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

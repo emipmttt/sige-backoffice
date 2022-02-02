@@ -1,25 +1,30 @@
 <template>
   <div class="pa-2">
     <h1 class="white--text">Calificaciones</h1>
-    <template v-for="(course, index) in currentCourses">
-      <v-card
-        class="secondary--bg"
-        v-show="currentCourses[index].show"
-        :key="course.id"
-      >
+    <div v-if="!IHaveCourses">
+      <v-card class="secondary--bg">
         <v-card-text>
-          <div>
-            <h2 class="white--text">
-              {{ course.title }}
-            </h2>
-          </div>
-
-          <div class="white--text">
-            <CourseItem @show="showCourse(index)" :course="course" />
-          </div>
+          <h2 class="white--text">No tienes materias asignadas</h2>
         </v-card-text>
       </v-card>
-    </template>
+    </div>
+    <div>
+      <div v-for="(course, index) in currentCourses" :key="course.id">
+        <v-card class="secondary--bg" v-show="currentCourses[index].show">
+          <v-card-text>
+            <div>
+              <h2 class="white--text">
+                {{ course.title }}
+              </h2>
+            </div>
+
+            <div class="white--text">
+              <CourseItem @show="showCourse(index)" :course="course" />
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
+    </div>
 
     <v-row>
       <v-col xm="6"> </v-col>
@@ -36,7 +41,7 @@ export default {
   },
 
   data() {
-    return { currentCourses: [] };
+    return { currentCourses: [], IHaveCourses: false };
   },
   computed: {
     ...mapState(["courses", "users"]),
@@ -44,6 +49,7 @@ export default {
   methods: {
     ...mapActions(["get_courses"]),
     showCourse(index) {
+      this.IHaveCourses = true;
       this.currentCourses[index].show = true;
       this.$forceUpdate();
     },
@@ -52,6 +58,9 @@ export default {
     courses(value) {
       this.currentCourses = value;
     },
+    currentCourses(value) {
+      console.log("this.currentCourses", value);
+    },
   },
   async created() {
     await this.get_courses();
@@ -59,5 +68,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

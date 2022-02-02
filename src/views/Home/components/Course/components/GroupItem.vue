@@ -2,7 +2,7 @@
   <tr>
     <td>{{ group.title }}</td>
     <td>
-      <v-dialog class="secondary--bg" v-model="dialog" width="500">
+      <v-dialog class="secondary--bg" v-model="dialogMatter" width="500">
         <template v-slot:activator="{ on, attrs }">
           <v-btn class="secondary--bg" v-bind="attrs" v-on="on">
             <v-icon>article</v-icon>
@@ -16,13 +16,14 @@
 
           <v-card-text>
             <br />
-            <div class="d-flex">
+            <form @submit.prevent="createMatter" class="d-flex">
               <v-text-field
                 v-model="matterName"
                 class="mr-2"
                 label="Nueva Materia"
                 outlined
                 dense
+                required
               ></v-text-field>
 
               <v-select
@@ -31,12 +32,13 @@
                 label="Profesor"
                 dense
                 outlined
+                required
               ></v-select>
 
-              <v-btn @click="createMatter" color="primary" class="ml-2"
-                >Añadir Materia</v-btn
-              >
-            </div>
+              <v-btn type="submit" color="primary" class="ml-2">
+                Añadir Materia
+              </v-btn>
+            </form>
 
             <table style="width: 100%">
               <thead>
@@ -70,10 +72,53 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="dialog = false"> Cerrar </v-btn>
+            <v-btn color="primary" text @click="dialogMatter = false">
+              Cerrar
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
+    </td>
+    <td>
+      <v-dialog class="secondary--bg" v-model="dialogName" width="500">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn class="secondary--bg" v-bind="attrs" v-on="on">
+            <v-icon>create</v-icon>
+          </v-btn>
+        </template>
+
+        <v-card dark class="secondary--bg">
+          <v-card-title dark class="headline secondary--bg lighten-2">
+            Editar Grupo
+          </v-card-title>
+
+          <v-card-text>
+            <br />
+
+            <v-text-field
+              v-model="groupName"
+              class="mr-2"
+              label="Nombre del grupo"
+              outlined
+              dense
+            ></v-text-field>
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="dialogName = false">
+              Cerrar
+            </v-btn>
+            <v-btn color="primary" @click="updateGroup">
+              Guardar
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </td>
+    <td>
       <v-btn @click="deleteGroup" class="secondary--bg ml-2">
         <v-icon>delete</v-icon>
       </v-btn>
@@ -90,15 +135,28 @@ export default {
   },
   data() {
     return {
-      dialog: false,
+      dialogMatter: false,
+      dialogName: false,
       matterName: "",
       teachers: [],
       teacherSelected: "",
-
+      groupName: "",
       matters: [],
     };
   },
   methods: {
+    async updateGroup() {
+      await firebase
+        .firestore()
+        .collection("groups")
+        .doc(this.group.id)
+        .update({
+          title: this.groupName,
+        });
+
+      this.$emit("getGroups");
+      this.dialogName = false;
+    },
     getTeacher(findTeacher) {
       return this.teachers.find((teacher) => {
         return teacher.value == findTeacher;
@@ -106,7 +164,11 @@ export default {
     },
 
     async deleteMatter(id) {
-      await firebase.firestore().collection("matters").doc(id).delete();
+      await firebase
+        .firestore()
+        .collection("matters")
+        .doc(id)
+        .delete();
       await this.get_matters();
     },
 
@@ -121,14 +183,21 @@ export default {
     },
 
     async createMatter() {
-      await firebase.firestore().collection("matters").add({
-        group: this.group.id,
-        course: this.course,
-        name: this.matterName,
-        teacher: this.teacherSelected,
-      });
+      if (this.teacherSelected) {
+        await firebase
+          .firestore()
+          .collection("matters")
+          .add({
+            group: this.group.id,
+            course: this.course,
+            name: this.matterName,
+            teacher: this.teacherSelected,
+          });
 
-      await this.get_matters();
+        await this.get_matters();
+      } else {
+        alert("Selecciona un profesor o profesora");
+      }
     },
 
     async get_matters() {
