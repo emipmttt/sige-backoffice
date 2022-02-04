@@ -1,25 +1,28 @@
 <template>
-  <div v-if="isMyCourse">
-    <table style="width: 100%">
-      <thead>
-        <tr>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(group, index) in myGroups" :key="index">
-          <td>{{ group.title }}</td>
-          <td style="text-align: right">
-            <MatterNotes
-              :group="group"
-              :matters="matters"
-              :students="students"
-            />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div v-if="isMyCourse" class="secondary--bg">
+    <v-simple-table dark class="secondary--bg ">
+      <template v-slot:default>
+        <thead>
+          <tr>
+            <th class="text-left">Materia</th>
+            <th class="text-left">Calificar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(group, index) in myGroups" :key="index">
+            <td>{{ group.title }}</td>
+            <td>
+              <MatterNotes
+                :group="group"
+                :matters="matters"
+                :students="students"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </template>
+    </v-simple-table>
+
     <!-- <pre>
       {{ course }}
     </pre> -->
@@ -135,5 +138,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

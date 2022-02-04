@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog">
+  <v-dialog scrollable fullscreen v-model="dialog">
     <template v-slot:activator="{ on, attrs }">
       <v-btn color="primary" v-bind="attrs" v-on="on">
         <v-icon>article</v-icon>
@@ -7,68 +7,74 @@
     </template>
 
     <v-card dark>
-      <v-card-title class="headline white--text secondary--bg lighten-2">
-        Calificar
-      </v-card-title>
+      <v-toolbar dark class="secondary--bg">
+        <v-btn icon dark @click="dialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+        <v-toolbar-title>Calificar</v-toolbar-title>
+        <v-spacer></v-spacer>
+      </v-toolbar>
 
       <v-card-text class="secondary--bg">
         <br />
-        <table width="100%">
-          <thead>
-            <tr>
-              <th style="text-align: left">Estudiante</th>
-              <th
-                style="text-align: left"
-                v-for="matter in mattersGroup"
-                :key="matter.id"
-              >
-                {{ matter.name }}
-              </th>
-              <th style="text-align: left"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="student in students" :key="student.id">
-              <td style="text-align: left">{{ student.user.name }}</td>
-              <td
-                style="text-align: left"
-                v-for="matter in mattersGroup"
-                :key="matter.id"
-              >
-                <v-text-field
-                  hide-details
-                  :data-student="student.id"
-                  :data-matter="matter.id"
-                  data-type-input="value"
-                  label="Calificación ( 0 - 10)"
-                  max="10"
-                  min="0"
-                  dense
-                  outlined
-                  type="number"
-                  v-model="valuesIndex[`${student.id}_${matter.id}_value`]"
-                ></v-text-field>
-                <v-textarea
-                  hide-details
-                  :data-student="student.id"
-                  :data-matter="matter.id"
-                  data-type-input="observations"
-                  label="Observaciones"
-                  dense
-                  outlined
-                  v-model="
-                    valuesIndex[`${student.id}_${matter.id}_observations`]
-                  "
-                ></v-textarea>
-              </td>
-              <td style="text-align: right">
-                <v-btn color="primary" @click="saveNote(student)">
-                  <v-icon>check</v-icon>
-                </v-btn>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <v-simple-table black class="secondary--bg">
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th style="text-align: left">Estudiante</th>
+                <th
+                  style="text-align: left"
+                  v-for="matter in mattersGroup"
+                  :key="matter.id"
+                >
+                  {{ matter.name }}
+                </th>
+                <th style="text-align: left"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="student in students" :key="student.id">
+                <td style="text-align: left">{{ student.user.name }}</td>
+                <td
+                  style="text-align: left"
+                  v-for="matter in mattersGroup"
+                  :key="matter.id"
+                >
+                  <v-text-field
+                    hide-details
+                    :data-student="student.id"
+                    :data-matter="matter.id"
+                    data-type-input="value"
+                    label="Calificación ( 0 - 10)"
+                    max="10"
+                    min="0"
+                    dense
+                    outlined
+                    type="number"
+                    v-model="valuesIndex[`${student.id}_${matter.id}_value`]"
+                  ></v-text-field>
+                  <v-textarea
+                    hide-details
+                    :data-student="student.id"
+                    :data-matter="matter.id"
+                    data-type-input="observations"
+                    label="Observaciones"
+                    dense
+                    outlined
+                    v-model="
+                      valuesIndex[`${student.id}_${matter.id}_observations`]
+                    "
+                  ></v-textarea>
+                </td>
+                <td style="text-align: right">
+                  <v-btn color="primary" @click="saveNote(student)">
+                    <v-icon>check</v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
       </v-card-text>
 
       <v-divider></v-divider>

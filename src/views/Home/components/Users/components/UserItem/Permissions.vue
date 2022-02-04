@@ -37,8 +37,14 @@
           <v-switch v-model="permissions.call"></v-switch>
         </div>
         <div class="d-flex justify-space-between align-center">
-          <span class="text-h5">Calificiones</span>
+          <span class="text-h5">Calificiones (profesores)</span>
           <v-switch v-model="permissions.notes"></v-switch>
+        </div>
+        <div class="d-flex justify-space-between align-center">
+          <span class="text-h5"
+            >Administrar Calificaciones (Administradores)</span
+          >
+          <v-switch v-model="permissions.viewNotes"></v-switch>
         </div>
       </v-card-text>
 
@@ -52,6 +58,7 @@
 </template>
 <script>
 import firebase from "@/config/firebase";
+import { mapMutations, mapState } from "vuex";
 
 export default {
   props: {
@@ -71,19 +78,46 @@ export default {
         paymentsExternal: false,
         call: false,
         notes: false,
+        viewNotes: false,
       },
     };
   },
+  computed: {
+    ...mapState({
+      currentUser: "user",
+    }),
+  },
   methods: {
+    ...mapMutations(["update_state"]),
+
     async update() {
       if (this.loading) return;
       this.loading = true;
-      await firebase.firestore().collection("users").doc(this.user.id).update({
-        permissions: this.permissions,
-      });
+      await firebase
+        .firestore()
+        .collection("users")
+        .doc(this.user.id)
+        .update({
+          permissions: this.permissions,
+        });
       alert("Persmisos actualizados correctamente");
       this.dialog = false;
       this.loading = false;
+
+      if (this.currentUser.id == this.user.id) {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(this.user.id)
+          .get()
+          .then((response) => {
+            const userdata = { id: response.id, ...response.data() };
+
+            this.update_state(["user", userdata]);
+
+            localStorage.setItem("sige_user", JSON.stringify(userdata));
+          });
+      }
     },
   },
   mounted() {

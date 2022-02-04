@@ -38,7 +38,6 @@ export default {
     getBills() {
       this.bills = false;
       var v = this;
-      console.log("lde");
       setTimeout(() => {
         v.bills = true;
       }, 500);

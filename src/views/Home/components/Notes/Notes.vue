@@ -23,6 +23,7 @@
             </div>
           </v-card-text>
         </v-card>
+        <br />
       </div>
     </div>
 
@@ -44,7 +45,7 @@ export default {
     return { currentCourses: [], IHaveCourses: false };
   },
   computed: {
-    ...mapState(["courses", "users"]),
+    ...mapState(["courses", "users", "user"]),
   },
   methods: {
     ...mapActions(["get_courses"]),
@@ -53,13 +54,28 @@ export default {
       this.currentCourses[index].show = true;
       this.$forceUpdate();
     },
+    setCourses() {
+      if (
+        this.user &&
+        this.user.permissions &&
+        (this.user.permissions.viewNotes == "true" ||
+          this.user.permissions.viewNotes == true)
+      ) {
+        this.currentCourses = this.courses.map((e) => {
+          e.show = true;
+          return e;
+        });
+      } else {
+        this.currentCourses = this.courses;
+      }
+    },
   },
   watch: {
-    courses(value) {
-      this.currentCourses = value;
+    courses() {
+      this.setCourses();
     },
-    currentCourses(value) {
-      console.log("this.currentCourses", value);
+    user() {
+      this.setCourses();
     },
   },
   async created() {
