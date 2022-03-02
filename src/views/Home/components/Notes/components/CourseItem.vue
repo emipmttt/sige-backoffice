@@ -5,13 +5,13 @@
         <thead>
           <tr>
             <th class="text-left">Materia</th>
-            <th class="text-left">Calificar</th>
+            <th class="text-right">Calificar</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(group, index) in myGroups" :key="index">
-            <td>{{ group.title }}</td>
-            <td>
+            <td class="text-left">{{ group.title }}</td>
+            <td class="text-right">
               <MatterNotes
                 :group="group"
                 :matters="matters"
@@ -48,6 +48,7 @@ export default {
   computed: {
     ...mapState(["user"]),
     isMyCourse() {
+      if (this.user?.permissions?.viewNotes) return true;
       var groups = {};
       this.matters.forEach((matter) => {
         groups[matter.group] = true;

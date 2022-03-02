@@ -15,6 +15,7 @@
             <div>
               <h2 class="white--text">
                 {{ course.title }}
+                <!-- <pre>{{ course }}</pre> -->
               </h2>
             </div>
 
