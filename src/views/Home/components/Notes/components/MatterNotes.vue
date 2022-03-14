@@ -22,19 +22,30 @@
             <thead>
               <tr>
                 <th style="text-align: left">Estudiante</th>
-                <th
-                  style="text-align: left"
-                  v-for="matter in mattersGroup"
-                  :key="matter.id"
-                >
-                  {{ matter.name }}
-                </th>
+                <template v-if="mattersGroup.left > 0">
+                  <th
+                    style="text-align: left"
+                    v-for="matter in mattersGroup"
+                    :key="matter.id"
+                  >
+                    {{ matter.name }}
+                  </th>
+                </template>
+                <template v-else>
+                  <th style="text-align: left">
+                    No hay materias asignadas
+                  </th>
+                </template>
                 <th style="text-align: left"></th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="student in students" :key="student.id">
-                <td style="text-align: left">{{ student.user.name }}</td>
+                <td style="text-align: left">
+                  {{ student.user.name }}
+                  {{ student.user.lastname1 }}
+                  {{ student.user.lastname2 }}
+                </td>
                 <td
                   style="text-align: left"
                   v-for="matter in mattersGroup"
@@ -67,9 +78,11 @@
                   ></v-textarea>
                 </td>
                 <td style="text-align: right">
-                  <v-btn color="primary" @click="saveNote(student)">
-                    <v-icon>check</v-icon>
-                  </v-btn>
+                  <template v-if="mattersGroup.length > 0">
+                    <v-btn color="primary" @click="saveNote(student)">
+                      <v-icon>check</v-icon>
+                    </v-btn>
+                  </template>
                 </td>
               </tr>
             </tbody>
@@ -105,6 +118,8 @@ export default {
   },
   computed: {
     mattersGroup() {
+      console.log(this.matters);
+      console.log(this.group.id);
       return this.matters.filter((matter) => matter.group == this.group.id);
     },
   },

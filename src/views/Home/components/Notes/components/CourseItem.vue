@@ -4,7 +4,7 @@
       <template v-slot:default>
         <thead>
           <tr>
-            <th class="text-left">Materia</th>
+            <th class="text-left">Grupo</th>
             <th class="text-right">Calificar</th>
           </tr>
         </thead>
@@ -108,11 +108,22 @@ export default {
       this.groups = groups;
     },
     async getMyMatters() {
-      const mattersQuery = await firebase
-        .firestore()
-        .collection("matters")
-        .where("teacher", "==", this.user.id)
-        .get();
+      var mattersQuery;
+
+      const viewAllNotesPermission = this.user?.permissions?.viewNotes;
+
+      if (viewAllNotesPermission) {
+        mattersQuery = await firebase
+          .firestore()
+          .collection("matters")
+          .get();
+      } else {
+        mattersQuery = await firebase
+          .firestore()
+          .collection("matters")
+          .where("teacher", "==", this.user.id)
+          .get();
+      }
 
       var matters = [];
 

@@ -194,6 +194,9 @@ export default {
             teacher: this.teacherSelected,
           });
 
+        this.matterName = "";
+        this.teacherSelected = "";
+
         await this.get_matters();
       } else {
         alert("Selecciona un profesor o profesora");
@@ -237,7 +240,9 @@ export default {
 
       teachers = teachers.map((teacher) => {
         return {
-          text: teacher.user.name,
+          text: `${teacher.user.name} ${
+            teacher.user.lastname1 ? teacher.user.lastname1 : ""
+          } ${teacher.user.lastname2 ? teacher.user.lastname2 : ""}`,
           value: teacher.id,
         };
       });
