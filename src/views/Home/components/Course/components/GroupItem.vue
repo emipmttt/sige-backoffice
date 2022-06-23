@@ -24,6 +24,7 @@
                 outlined
                 dense
                 required
+                :disabled="loading"
               ></v-text-field>
 
               <v-select
@@ -33,9 +34,15 @@
                 dense
                 outlined
                 required
+                :disabled="loading"
               ></v-select>
 
-              <v-btn type="submit" color="primary" class="ml-2">
+              <v-btn
+                :disabled="loading"
+                type="submit"
+                color="primary"
+                class="ml-2"
+              >
                 Añadir Materia
               </v-btn>
             </form>
@@ -101,6 +108,7 @@
               label="Nombre del grupo"
               outlined
               dense
+              :disabled="loading"
             ></v-text-field>
           </v-card-text>
 
@@ -142,6 +150,7 @@ export default {
       teacherSelected: "",
       groupName: "",
       matters: [],
+      loading: false,
     };
   },
   methods: {
@@ -184,6 +193,9 @@ export default {
 
     async createMatter() {
       if (this.teacherSelected) {
+        if (this.loading) return;
+        this.loading = true;
+
         await firebase
           .firestore()
           .collection("matters")
@@ -192,6 +204,7 @@ export default {
             course: this.course,
             name: this.matterName,
             teacher: this.teacherSelected,
+            createdAt: Date.now(),
           });
 
         this.matterName = "";
@@ -201,6 +214,8 @@ export default {
       } else {
         alert("Selecciona un profesor o profesora");
       }
+
+      this.loading = false;
     },
 
     async get_matters() {
@@ -219,7 +234,9 @@ export default {
         });
       });
 
-      this.matters = matters;
+      this.matters = matters.sort((a, b) => {
+        return a.createdAt - b.createdAt;
+      });
     },
 
     async get_teachers() {

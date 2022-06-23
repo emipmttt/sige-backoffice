@@ -46,7 +46,12 @@
             <th class="text-left">{{ bill.date }}</th>
             <th class="text-left">{{ bill.description }}</th>
             <th class="text-left">
-              <CreateBill :editData="bill" @getBills="updateBills" />
+              <CreateBill
+                :edit="true"
+                :editData="bill"
+                @getBills="updateBills"
+                :billType="billType"
+              />
               <v-btn @click="deleteItem(bill._id)" color="primary"
                 ><v-icon>delete</v-icon>
               </v-btn>
@@ -170,5 +175,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

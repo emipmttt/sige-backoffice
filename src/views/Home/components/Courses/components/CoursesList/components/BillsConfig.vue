@@ -1,11 +1,18 @@
 <template>
   <div class="pa-5">
     <h1 class="text-h6">Pagos</h1>
-    <form class="d-flex align-center" @submit.prevent="create_bill">
+    <form class="d-flex align-center" @submit.prevent="saveBill">
       <div class="pa-1">
         <v-text-field
           v-model="amount"
-          label="Monto"
+          label="Monto mensual"
+          type="number"
+        ></v-text-field>
+      </div>
+      <div class="pa-1">
+        <v-text-field
+          v-model="latePayment"
+          label="recargo"
           type="number"
         ></v-text-field>
       </div>
@@ -20,7 +27,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
               v-model="date"
-              label="Fecha"
+              label="Fecha de finalización"
               prepend-icon="event"
               readonly
               v-bind="attrs"
@@ -40,60 +47,69 @@
       </div>
 
       <div class="pa-1">
-        <v-btn type="submit">Añadir</v-btn>
+        <v-btn type="submit">Guardar</v-btn>
       </div>
     </form>
-    <v-row v-for="(bill, index) in bills_course" :key="index">
-      <v-col>{{ bill.amount }}</v-col>
-      <v-col>{{ bill.date }}</v-col>
-      <v-col>
-        <v-btn @click="delete_bill(index)">
-          <v-icon>delete</v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
+    
   </div>
 </template>
 
 <script>
+import firebase from "@/config/firebase";
+
 export default {
   props: {
-    bills: Array,
+    payment: Object,
+    course: Object,
   },
   data() {
     return {
-      bills_course: [],
-      amount: 0,
-
+      amount: this.payment?.amount || 0,
+      latePayment: this.payment?.latePayment || 0,
       date_modal: false,
-      date: "",
+      date: this.payment?.finishDate,
     };
   },
 
   methods: {
-    create_bill() {
-      let bills = this.bills_course;
-      bills.push({
-        amount: this.amount,
-        date: this.date,
-      });
-      this.title = "";
-      this.teacher = "";
-      this.bills_course = bills;
-      this.$emit("update_bills", this.bills_course);
+    async saveBill() {
+      await firebase
+        .firestore()
+        .collection("courses")
+        .doc(this.course.id)
+        .update({
+          ...this.course,
+          payment: {
+            amount: this.amount,
+            latePayment: this.latePayment,
+            finishDate: this.date,
+          },
+        });
+      this.$emit("getCourses");
+      alert("Pagos actualizados")
     },
-    delete_bill(index) {
-      let bills = this.bills_course;
-      bills.splice(index, 1);
-      this.bills_course = bills;
-      this.$emit("update_bills", this.bills_course);
-    },
+    // create_bill() {
+    //   let bills = this.bills_course;
+    //   bills.push({
+    //     amount: this.amount,
+    //     date: this.date,
+    //   });
+    //   this.amount = "";
+    //   this.date = "";
+    //   this.bills_course = bills;
+    //   this.$emit("update_bills", this.bills_course);
+    // },
+    // delete_bill(index) {
+    //   let bills = this.bills_course;
+    //   bills.splice(index, 1);
+    //   this.bills_course = bills;
+    //   this.$emit("update_bills", this.bills_course);
+    // },
   },
-  created() {
-    this.bills_course = this.bills || [];
-  },
+  mounted(){
+    console.log(this.date);
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>

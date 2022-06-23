@@ -34,8 +34,9 @@
             <v-divider></v-divider>
 
             <BillsConfig
-              @update_bills="update_bills($event)"
-              :bills="course.bills"
+              @getCourses="$emit('getCourses')"
+              :course="course"
+              :payment="course.payment"
             />
           </v-card-text>
 
@@ -120,8 +121,8 @@ export default {
       this.course.groups = groups;
       this.update_course();
     },
-    update_bills(bills) {
-      this.course.bills = bills;
+    update_bills(bill) {
+      this.course.bill = bill;
       this.update_course();
     },
   },

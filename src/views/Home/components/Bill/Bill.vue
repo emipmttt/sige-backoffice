@@ -1,6 +1,15 @@
 <template>
   <div class="pa-2">
     <h1 class="white--text">Pagos {{ billType }}</h1>
+
+    <p class="white--text">
+      {{
+        billType == "estudiantes"
+          ? "Esta sección está destinada a subir pagos de colegiatura de estudiantes"
+          : ""
+      }}
+    </p>
+
     <BillCSV
       :billType="billType"
       v-if="billType == 'externos'"

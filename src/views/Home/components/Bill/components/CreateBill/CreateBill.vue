@@ -25,9 +25,9 @@
     </template>
 
     <v-card class="secondary--bg" dark>
-      <v-card-title class="headline secondary--bg"
-        >Crear un pago nuevo.</v-card-title
-      >
+      <v-card-title class="headline secondary--bg">{{
+        modalTitle
+      }}</v-card-title>
       <v-card-text>
         <v-autocomplete
           v-model="user"
@@ -42,6 +42,13 @@
           label="Monto"
           type="number"
         ></v-text-field>
+        <v-autocomplete
+          v-if="billType == 'estudiantes'"
+          v-model="course"
+          :items="coursesList"
+          :search-input.sync="search_course"
+          label="Curso"
+        ></v-autocomplete>
         <v-text-field v-model="description" label="Concepto"></v-text-field>
         <v-dialog
           ref="dialog"
@@ -91,10 +98,12 @@ export default {
   props: {
     billType: String,
     editData: Object,
+    edit: Boolean,
   },
   data() {
     return {
       search_user: "",
+      search_course: "",
 
       // id, just use for edit
       id: "",
@@ -103,18 +112,27 @@ export default {
       amount: 0,
       date: "",
       description: "",
+      course: "",
 
       create_bill: false,
       date_modal: false,
     };
   },
   computed: {
-    ...mapState(["users"]),
+    ...mapState(["users", "courses"]),
+    coursesList() {
+      return this.courses.map((course) => {
+        return { text: course.title, value: course.id };
+      });
+    },
     users_list() {
       return this.users.map((user) => ({
         text: `${user.user.name} ${user.user.lastname1 || ""}`,
         value: user.id,
       }));
+    },
+    modalTitle() {
+      return this.edit ? "Editar Pago" : "Crear un nuevo Pago";
     },
   },
   methods: {
@@ -132,6 +150,7 @@ export default {
           name: `${userObject.user.name} ${userObject.user.lastname1 || ""}`,
           amount: this.amount,
           description: this.description,
+          course: this.course,
           date: this.date,
         });
 
@@ -139,6 +158,7 @@ export default {
         this.amount = "";
         this.description = "";
         this.date = "";
+        this.course = "";
         alert(response.data.message);
         this.$emit("getBills");
 
@@ -158,6 +178,7 @@ export default {
             name: `${userObject.user.name} ${userObject.user.lastname1 || ""}`,
             amount: this.amount,
             description: this.description,
+            course: this.course,
             date: this.date,
             createdAt: Date.now(),
             type: this.billType == "estudiantes" ? "student" : "external",
@@ -166,6 +187,7 @@ export default {
 
         this.user = "null";
         this.amount = "";
+        this.course = "";
         this.description = "";
         this.date = "";
         alert(response.data.message);
@@ -183,6 +205,7 @@ export default {
         this.user = this.editData.user;
         this.amount = this.editData.amount;
         this.description = this.editData.description;
+        this.course = this.editData.course;
         this.date = this.editData.date;
       }
     },
@@ -192,6 +215,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

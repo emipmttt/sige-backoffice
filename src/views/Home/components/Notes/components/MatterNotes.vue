@@ -22,7 +22,7 @@
             <thead>
               <tr>
                 <th style="text-align: left">Estudiante</th>
-                <template v-if="mattersGroup.left > 0">
+                <template v-if="mattersGroup.length > 0">
                   <th
                     style="text-align: left"
                     v-for="matter in mattersGroup"
@@ -120,7 +120,13 @@ export default {
     mattersGroup() {
       console.log(this.matters);
       console.log(this.group.id);
-      return this.matters.filter((matter) => matter.group == this.group.id);
+      const filtered = this.matters.filter(
+        (matter) => matter.group == this.group.id
+      );
+
+      return filtered.sort((a, b) => {
+        return a.createdAt - b.createdAt;
+      });
     },
   },
   methods: {
